@@ -46,7 +46,7 @@ void waitMicrosecond(uint32_t us)
  */
 int main(void)
 {
-    GPIO_HANDLE_t ioTest;
+    GPIO_HANDLE_t ioTest, led3;
 
     // The usual initHw
     initHW();
@@ -59,6 +59,13 @@ int main(void)
     ioTest.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
 
     GPIO_Init(&ioTest);
+
+    led3.pGPIOx = GPIOF;
+    led3.gpioPinConfig.PINNUMBER = 3;
+    led3.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
+    led3.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
+
+    GPIO_Init(&led3);
 
     ioTest.pGPIOx = GPIOF;
     ioTest.gpioPinConfig.PINNUMBER  = 4;
@@ -74,9 +81,11 @@ int main(void)
         if(GPIO_ReadFromPin(GPIOF, 4) == 0)
         {
             GPIO_WriteToPin(GPIOF, 2, 1);
+            GPIO_WriteToPin(GPIOF, 3, 1);
             waitMicrosecond(100000);
 
             GPIO_WriteToPin(GPIOF, 2, 0);
+            GPIO_WriteToPin(GPIOF, 3, 0);
             waitMicrosecond(100000);
         }
 
