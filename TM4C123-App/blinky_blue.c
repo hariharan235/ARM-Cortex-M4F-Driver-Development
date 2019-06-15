@@ -61,7 +61,7 @@ int main(void)
     GPIO_Init(&ioTest);
 
     led3.pGPIOx = GPIOF;
-    led3.gpioPinConfig.PINNUMBER = 3;
+    led3.gpioPinConfig.PINNUMBER = 1;
     led3.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
     led3.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
 
@@ -81,11 +81,11 @@ int main(void)
         if(GPIO_ReadFromPin(GPIOF, 4) == 0)
         {
             GPIO_WriteToPin(GPIOF, 2, 1);
-            GPIO_WriteToPin(GPIOF, 3, 1);
+            GPIO_WriteToPin(GPIOF, 1, 1);
             waitMicrosecond(100000);
 
             GPIO_WriteToPin(GPIOF, 2, 0);
-            GPIO_WriteToPin(GPIOF, 3, 0);
+            GPIO_WriteToPin(GPIOF, 1, 0);
             waitMicrosecond(100000);
         }
 
