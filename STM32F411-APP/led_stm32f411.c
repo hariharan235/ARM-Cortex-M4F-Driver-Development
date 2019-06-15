@@ -119,7 +119,7 @@ void pushBtnInit()
 void extPushBtnInit()
 {
 
-	/*!<External PB on PD5*/
+	/*!<External PB on PE1*/
 
 	GPIO_handle_t ePB;
 
