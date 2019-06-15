@@ -1,0 +1,14 @@
+
+# Do not ignore file pattern in any subdirectory
+!*/src
+
+# But only ignore in the current directory
+/src 
+
+system/
+Debug/
+include/
+ldscripts/
+.settings
+.cproject
+.project
