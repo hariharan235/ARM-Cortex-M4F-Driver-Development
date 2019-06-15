@@ -1,5 +1,10 @@
+
+# Do not ignore file pattern in any subdirectory
 !*/src
-/src
+
+# But only ignore in the current directory
+/src 
+
 system/
 Debug/
 include/
