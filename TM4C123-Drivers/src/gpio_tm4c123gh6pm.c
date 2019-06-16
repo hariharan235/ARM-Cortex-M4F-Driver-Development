@@ -216,7 +216,7 @@ uint8_t GPIO_ReadFromPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber)
 
     uint8_t retVal = 0;                     /*!< Variable to store the return value of the pin                       */
 
-    retVal = (pGPIOx->DATA >> pinNumber);  /*!< Shift value from the pin to LSB and mask it with 0xFF (Masking bit) */
+    retVal = (pGPIOx->DATA >> pinNumber);   /*!< Shift value from the pin to LSB and mask it with 0xFF (Masking bit) */
 
     return retVal;
 }
