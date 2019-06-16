@@ -15,7 +15,7 @@ void initHW()
 {
 
     // clock set up
-    SYSCTL_t *pSYSCTL = SYSCTL;
+    SYSCTL_T *pSYSCTL = SYSCTL;
 
     // 40 Hz
     pSYSCTL->RCC = 0x00000540 | 0x00400000 | (0x04 << 23);
@@ -46,7 +46,7 @@ void waitMicrosecond(uint32_t us)
  */
 int main(void)
 {
-    GPIO_HANDLE_t ioTest, led3;
+    GPIO_HANDLE_T ioTest, led3;
 
     // The usual initHw
     initHW();

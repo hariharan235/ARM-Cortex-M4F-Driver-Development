@@ -327,7 +327,7 @@ typedef struct
     __IO uint32_t PREEPROM;         /*!< EEPROM Peripheral Ready,                                                           Address offset: 0xA58          */
     __IO uint32_t PRWTIMER;         /*!< 32/64-Bit Wide General-Purpose Timer Peripheral Ready,                             Address offset: 0xA5C          */
 
-} SYSCTL_t;
+} SYSCTL_T;
 
 
 
@@ -368,7 +368,7 @@ typedef struct
     __I  uint32_t RESERVED7[3];   /*!< RESERVED,                                         Address offset: 0x194 to 0x19C */
     __IO uint32_t NVMSTAT;        /*!< Non-Volatile Memory Information,                  Address offset: 0x1A0          */
 
-} SYSCTL_LEGACY_t;
+} SYSCTL_LEGACY_T;
 
 
 
@@ -406,7 +406,7 @@ typedef struct
     __IO uint32_t ADCCTL;        /*!< GPIO ADC Control,                                Address offset: 0x000 */
     __IO uint32_t DMACTL;        /*!< GPIO DMA Control,                                Address offset: 0x000 */
 
-} GPIO_PORT_t;
+} GPIO_PORT_T;
 
 
 
@@ -420,22 +420,22 @@ typedef struct
 /**
  * @brief Peripheral Declarations
  */
-#define GPIOA                    ((GPIO_PORT_t *) GPIOA_BASEADDR)
-#define GPIOB                    ((GPIO_PORT_t *) GPIOB_BASEADDR)
-#define GPIOC                    ((GPIO_PORT_t *) GPIOC_BASEADDR)
-#define GPIOD                    ((GPIO_PORT_t *) GPIOD_BASEADDR)
-#define GPIOE                    ((GPIO_PORT_t *) GPIOE_BASEADDR)
-#define GPIOF                    ((GPIO_PORT_t *) GPIOF_BASEADDR)
+#define GPIOA                    ((GPIO_PORT_T *) GPIOA_BASEADDR)
+#define GPIOB                    ((GPIO_PORT_T *) GPIOB_BASEADDR)
+#define GPIOC                    ((GPIO_PORT_T *) GPIOC_BASEADDR)
+#define GPIOD                    ((GPIO_PORT_T *) GPIOD_BASEADDR)
+#define GPIOE                    ((GPIO_PORT_T *) GPIOE_BASEADDR)
+#define GPIOF                    ((GPIO_PORT_T *) GPIOF_BASEADDR)
 
-#define GPIOA_AHB                ((GPIO_PORT_t *) GPIOA_AHB_BASEADDR)
-#define GPIOB_AHB                ((GPIO_PORT_t *) GPIOB_AHB_BASEADDR)
-#define GPIOC_AHB                ((GPIO_PORT_t *) GPIOC_AHB_BASEADDR)
-#define GPIOD_AHB                ((GPIO_PORT_t *) GPIOD_AHB_BASEADDR)
-#define GPIOE_AHB                ((GPIO_PORT_t *) GPIOE_AHB_BASEADDR)
-#define GPIOF_AHB                ((GPIO_PORT_t *) GPIOF_AHB_BASEADDR)
+#define GPIOA_AHB                ((GPIO_PORT_T *) GPIOA_AHB_BASEADDR)
+#define GPIOB_AHB                ((GPIO_PORT_T *) GPIOB_AHB_BASEADDR)
+#define GPIOC_AHB                ((GPIO_PORT_T *) GPIOC_AHB_BASEADDR)
+#define GPIOD_AHB                ((GPIO_PORT_T *) GPIOD_AHB_BASEADDR)
+#define GPIOE_AHB                ((GPIO_PORT_T *) GPIOE_AHB_BASEADDR)
+#define GPIOF_AHB                ((GPIO_PORT_T *) GPIOF_AHB_BASEADDR)
 
-#define SYSCTL                   ((SYSCTL_t *)SYSCTL_BASEADDR)
-#define SYSCTL_LEGACY            ((SYSCTL_LEGACY_t*)SYSCTL_BASEADDR)
+#define SYSCTL                   ((SYSCTL_T *)SYSCTL_BASEADDR)
+#define SYSCTL_LEGACY            ((SYSCTL_LEGACY_T*)SYSCTL_BASEADDR)
 
 
 
