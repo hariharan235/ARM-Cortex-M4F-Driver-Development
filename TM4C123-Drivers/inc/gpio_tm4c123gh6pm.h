@@ -230,13 +230,6 @@ typedef struct
 
 
 
-/**
- * @brief   Enable GPIO Peripheral Clock
- * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
- * @retval  None.
- */
-void GPIO_clockEnable(GPIO_PORT_t *pGPIOx);
-
 
 /*
  * @brief   Intializes GPIO pin.
