@@ -44,11 +44,11 @@
 
 
 /**
- * @brief   Enable GPIO Peripheral Clock
+ * @brief   helper function to enable GPIO Peripheral Clock
  * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
  * @retval  None.
  */
-void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
+static void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
 {
 
     GPIO_PORT_t *portAddress;   /*!< Pointer to the Address of the GPIO port                     */
@@ -61,22 +61,22 @@ void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
 
     /* @brief Clock for ports should be enabled here */
 
-    if(portAddress == GPIOA)
-        sysClock->RCGCGPIO |= (0x00UL);
+    if(portAddress == GPIOA && !(sysClock->RCGCGPIO & 0x01UL))
+        sysClock->RCGCGPIO |= (0x01UL);
 
-    else if(portAddress == GPIOB)
+    else if(portAddress == GPIOB && !( sysClock->RCGCGPIO & (1 << 1) ))
         sysClock->RCGCGPIO |= (1 << 1);
 
-    else if(portAddress == GPIOC)
+    else if(portAddress == GPIOC && !( sysClock->RCGCGPIO & (1 << 2) ))
         sysClock->RCGCGPIO |= (1 << 2);
 
-    else if(portAddress == GPIOD)
+    else if(portAddress == GPIOD && !( sysClock->RCGCGPIO & (1 << 3) ))
         sysClock->RCGCGPIO |= (1 << 3);
 
-    else if(portAddress == GPIOE)
+    else if(portAddress == GPIOE && !( sysClock->RCGCGPIO & (1 << 4) ))
         sysClock->RCGCGPIO |= (1 << 4);
 
-    else if(portAddress == GPIOF)
+    else if(portAddress == GPIOF && !( sysClock->RCGCGPIO & (1 << 5) ) )
         sysClock->RCGCGPIO |= (1 << 5);
 
     else
@@ -99,6 +99,8 @@ void GPIO_Init(GPIO_HANDLE_t *pGPIOHandle)
     uint8_t  pupdSelect   = 0;  /*!< Variable for selecting Pull-Up or Pull-Down configurations  */
     uint8_t  pinMode      = 0;  /*!< Variable for selecting Digital or Analog configurations     */
 
+
+    GPIO_clockEnable(pGPIOHandle->pGPIOx);
 
     /*
      * @brief Configure GPIO Pin Direction
@@ -137,7 +139,6 @@ void GPIO_Init(GPIO_HANDLE_t *pGPIOHandle)
     }
 
 
-
     /* @brief Configure GPIO Pin Pull-Up and Pull-Down Select */
     pupdSelect = pGPIOHandle->gpioPinConfig.PULLUPDOWN;
 
@@ -159,7 +160,6 @@ void GPIO_Init(GPIO_HANDLE_t *pGPIOHandle)
         break;
 
     }
-
 
 
     /* @brief GPIO Digital or Analog Register Mode Select  */
