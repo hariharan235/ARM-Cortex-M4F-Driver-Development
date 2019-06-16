@@ -51,15 +51,11 @@
 static void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
 {
 
-    GPIO_PORT_t *portAddress;   /*!< Pointer to the Address of the GPIO port                     */
-    SYSCTL_t    *sysClock;      /*!< Pinter to the Address of System Control Structure           */
+    GPIO_PORT_t *portAddress = pGPIOx;  /*!< Pointer to the Address of the GPIO port            */
+    SYSCTL_t    *sysClock    = SYSCTL;  /*!< Pointer to the Address of System Control Structure */
 
 
-    portAddress = pGPIOx;
-    sysClock    = SYSCTL;
-
-
-    /* @brief Clock for ports should be enabled here */
+    /* @brief Enable Clock for GPIO ports with re initialization check  */
 
     if(portAddress == GPIOA && !(sysClock->RCGCGPIO & 0x01UL))
         sysClock->RCGCGPIO |= (0x01UL);
@@ -76,12 +72,8 @@ static void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
     else if(portAddress == GPIOE && !( sysClock->RCGCGPIO & (1 << 4) ))
         sysClock->RCGCGPIO |= (1 << 4);
 
-    else if(portAddress == GPIOF && !( sysClock->RCGCGPIO & (1 << 5) ) )
+    else if(portAddress == GPIOF && !( sysClock->RCGCGPIO & (1 << 5) ))
         sysClock->RCGCGPIO |= (1 << 5);
-
-    else
-        __asm(" NOP");
-
 
 }
 
@@ -214,7 +206,7 @@ void GPIO_DeInit(GPIO_HANDLE_t *pGPIOHandle)
 
 
 /*
- * @brief   Read from GPIO pin
+ * @brief   Read from GPIO pin (Blocking function)
  * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
  * @param   pinNumber : GPIO Pin Number.
  * @retval  uint8_t   : Return value from the pin.
@@ -252,7 +244,7 @@ void GPIO_WriteToPin(GPIO_PORT_t *pGPIOx, uint8_t pinNumber, bool value)
 
 
 /*
- * @brief   Read from GPIO port
+ * @brief   Read from GPIO port (Blocking function)
  * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_t).
  * @retval  uint8_t  : Data from the port
  */

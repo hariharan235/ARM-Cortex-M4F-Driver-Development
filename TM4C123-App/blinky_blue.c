@@ -51,7 +51,6 @@ int main(void)
     // The usual initHw
     initHW();
 
-    //GPIO_clockEnable(GPIOF);
 
     ioTest.pGPIOx = GPIOF;
     ioTest.gpioPinConfig.PINNUMBER = 2;

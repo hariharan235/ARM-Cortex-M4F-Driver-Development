@@ -248,7 +248,7 @@ void GPIO_DeInit(GPIO_HANDLE_t *pGPIOHandle);
 
 
 /*
- * @brief   Read from GPIO pin
+ * @brief   Read from GPIO pin (Blocking function)
  * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
  * @param   pinNumber : GPIO Pin Number.
  * @retval  uint8_t   : Return value from the pin.
@@ -267,7 +267,7 @@ void GPIO_WriteToPin(GPIO_PORT_t *pGPIOx, uint8_t pinNumber, bool value);
 
 
 /*
- * @brief   Read from GPIO port
+ * @brief   Read from GPIO port (Blocking function)
  * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_t).
  * @retval  uint8_t  : Data from the port
  */
