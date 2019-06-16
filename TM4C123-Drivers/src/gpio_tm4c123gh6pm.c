@@ -45,21 +45,17 @@
 
 /**
  * @brief   helper function to enable GPIO Peripheral Clock
- * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
+ * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_T).
  * @retval  None.
  */
-static void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
+static inline void GPIO_clockEnable(GPIO_PORT_T *pGPIOx)
 {
 
-    GPIO_PORT_t *portAddress;   /*!< Pointer to the Address of the GPIO port                     */
-    SYSCTL_t    *sysClock;      /*!< Pinter to the Address of System Control Structure           */
+    GPIO_PORT_T *portAddress = pGPIOx;  /*!< Pointer to the Address of the GPIO port            */
+    SYSCTL_T    *sysClock    = SYSCTL;  /*!< Pointer to the Address of System Control Structure */
 
 
-    portAddress = pGPIOx;
-    sysClock    = SYSCTL;
-
-
-    /* @brief Clock for ports should be enabled here */
+    /* @brief Enable Clock for GPIO ports with re initialization check  */
 
     if(portAddress == GPIOA && !(sysClock->RCGCGPIO & 0x01UL))
         sysClock->RCGCGPIO |= (0x01UL);
@@ -76,12 +72,8 @@ static void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
     else if(portAddress == GPIOE && !( sysClock->RCGCGPIO & (1 << 4) ))
         sysClock->RCGCGPIO |= (1 << 4);
 
-    else if(portAddress == GPIOF && !( sysClock->RCGCGPIO & (1 << 5) ) )
+    else if(portAddress == GPIOF && !( sysClock->RCGCGPIO & (1 << 5) ))
         sysClock->RCGCGPIO |= (1 << 5);
-
-    else
-        __asm(" NOP");
-
 
 }
 
@@ -89,10 +81,10 @@ static void GPIO_clockEnable(GPIO_PORT_t *pGPIOx)
 
 /**
  * @brief   Intializes GPIO pin.
- * @param   *pGPIOHandle : pointer to the GPIO Handle structure (GPIO_HANDLE_t).
+ * @param   *pGPIOHandle : pointer to the GPIO Handle structure (GPIO_HANDLE_T).
  * @retval  None.
  */
-void GPIO_Init(GPIO_HANDLE_t *pGPIOHandle)
+void GPIO_Init(GPIO_HANDLE_T *pGPIOHandle)
 {
 
     uint8_t  driveSelect  = 0;  /*!< Variable for selecting drive current values                 */
@@ -201,10 +193,10 @@ void GPIO_Init(GPIO_HANDLE_t *pGPIOHandle)
 
 /*
  * @brief   Deinitialize GPIO pin.
- * @param   *pGPIOHandle : pointer to the GPIO Handle structure (GPIO_HANDLE_t).
+ * @param   *pGPIOHandle : pointer to the GPIO Handle structure (GPIO_HANDLE_T).
  * @retval  None.
  */
-void GPIO_DeInit(GPIO_HANDLE_t *pGPIOHandle)
+void GPIO_DeInit(GPIO_HANDLE_T *pGPIOHandle)
 {
 
 
@@ -214,12 +206,12 @@ void GPIO_DeInit(GPIO_HANDLE_t *pGPIOHandle)
 
 
 /*
- * @brief   Read from GPIO pin
- * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
+ * @brief   Read from GPIO pin (Blocking function)
+ * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_T).
  * @param   pinNumber : GPIO Pin Number.
  * @retval  uint8_t   : Return value from the pin.
  */
-uint8_t GPIO_ReadFromPin(GPIO_PORT_t *pGPIOx, uint8_t pinNumber)
+uint8_t GPIO_ReadFromPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber)
 {
 
     uint8_t retVal = 0;                     /*!< Variable to store the return value of the pin                       */
@@ -233,12 +225,12 @@ uint8_t GPIO_ReadFromPin(GPIO_PORT_t *pGPIOx, uint8_t pinNumber)
 
 /*
  * @brief   Write to GPIO pin
- * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_t).
+ * @param   *pGPIOx   : pointer to the GPIO port structure (GPIO_PORT_T).
  * @param   pinNumber : GPIO Pin Number
  * @bool    value     : Value to be written, 1 or 0.
  * @retval  None.
  */
-void GPIO_WriteToPin(GPIO_PORT_t *pGPIOx, uint8_t pinNumber, bool value)
+void GPIO_WriteToPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber, bool value)
 {
 
     if (value == ENABLE)
@@ -252,11 +244,11 @@ void GPIO_WriteToPin(GPIO_PORT_t *pGPIOx, uint8_t pinNumber, bool value)
 
 
 /*
- * @brief   Read from GPIO port
- * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_t).
+ * @brief   Read from GPIO port (Blocking function)
+ * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_T).
  * @retval  uint8_t  : Data from the port
  */
-uint8_t GPIO_ReadFromPort(GPIO_PORT_t *pGPIOx)
+uint8_t GPIO_ReadFromPort(GPIO_PORT_T *pGPIOx)
 {
 
     uint8_t retVal = 0;              /*!< Variable to store the return value of the port */
@@ -270,11 +262,11 @@ uint8_t GPIO_ReadFromPort(GPIO_PORT_t *pGPIOx)
 
 /*
  * @brief   Write to GPIO port
- * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_t).
+ * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_T).
  * @param   value  : Data to be written to the port
  * @retval  None.
  */
-void GPIO_WriteToPort(GPIO_PORT_t *pGPIOx, uint8_t value)
+void GPIO_WriteToPort(GPIO_PORT_T *pGPIOx, uint8_t value)
 {
 
     pGPIOx->DATA = value;  /*!< Write value directly to the Data Register */
