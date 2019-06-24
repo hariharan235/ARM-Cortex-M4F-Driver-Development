@@ -40,6 +40,18 @@ void waitMicrosecond(uint32_t us)
     __asm("WMS_DONE0:"                     );
 }
 
+void GpiofISR(void)
+{
+
+    GPIO_WriteToPin(GPIOF, 2, 1);
+    GPIO_WriteToPin(GPIOF, 1, 1);
+
+
+    GPIOF->ICR |= (1 << 4);
+}
+
+
+
 
 /**
  * main.c
@@ -74,9 +86,13 @@ int main(void)
 
     GPIO_Init(&ioTest);
 
+    GPIOF->IM |= (1 << 4);
+    NVIC->EN0 |= (1 << 30);
+
     while(1)
     {
 
+#if NOT_IRQ
         if(GPIO_ReadFromPin(GPIOF, 4) == 0)
         {
             GPIO_WriteToPin(GPIOF, 2, 1);
@@ -87,6 +103,7 @@ int main(void)
             GPIO_WriteToPin(GPIOF, 1, 0);
             waitMicrosecond(100000);
         }
+#endif
 
     }
 
