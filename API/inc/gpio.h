@@ -80,6 +80,13 @@
 #define OPEN_DRAIN 0x06UL
 
 
+/*
+ * @brief GPIO Drive Select
+ */
+#define DRIVE_2MA 0x07UL
+#define DRIVE_4MA 0x08UL
+#define DRIVE_8MA 0x09UL
+
 
 /******************************************************************************/
 /*                                                                            */

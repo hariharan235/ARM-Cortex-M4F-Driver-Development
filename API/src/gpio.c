@@ -66,9 +66,10 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 
     uint8_t pinNumber = 0;
     uint8_t argValue  = 0;
-    uint8_t numOfArgs = 2;
+    uint8_t numOfArgs = 3;
     uint8_t loopVar   = 0;
 
+    uint8_t digitalSetFlag = 0;
 
     va_start(gpioArgs, pinDirection);
 
@@ -111,10 +112,15 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 
     _hf_setPinDefaults(&gpioPin);
 
-
     while(loopVar < numOfArgs)
     {
         argValue = (uint8_t)va_arg(gpioArgs, int);
+
+        // This should take care of unexpected values
+        if(argValue < 2 || argValue > 9)
+        {
+            break;
+        }
 
         switch(argValue)
         {
@@ -123,11 +129,13 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
             if(gpioPin.gpioPinConfig.PINMODE != GPIO_AMSEL_ENABLE)
             {
                 gpioPin.gpioPinConfig.PINMODE = GPIO_DEN_ENABLE;
+
+                digitalSetFlag = 1;
             }
             break;
 
         case ANALOG:
-            if(gpioPin.gpioPinConfig.PINMODE != GPIO_DEN_ENABLE)
+            if(digitalSetFlag == 0)
             {
                 gpioPin.gpioPinConfig.PINMODE = GPIO_AMSEL_ENABLE;
             }
@@ -149,6 +157,10 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 
         case OPEN_DRAIN:
             gpioPin.gpioPinConfig.OPENDRAIN = GPIO_ODDR_ENABLE;
+            break;
+
+        case DRIVE_4MA:
+            gpioPin.gpioPinConfig.OPENDRAIN = GPIO_DR4R;
             break;
 
         }

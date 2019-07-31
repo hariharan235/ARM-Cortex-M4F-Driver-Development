@@ -2,7 +2,7 @@
 
 /*
  * @file  blinky_blue.c
- * @brief Crude test for header file structure defines
+ * @brief Crude test for header file structure defines and driver APIs
  */
 
 
@@ -27,7 +27,6 @@ void initHW()
 
     // 40 Hz
     pSYSCTL->RCC = 0x00000540 | 0x00400000 | (0x04 << 23);
-
 
 }
 
