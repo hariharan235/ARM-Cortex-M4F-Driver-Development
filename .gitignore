@@ -15,7 +15,6 @@ ldscripts/
 
 .ccsproject
 targetConfigs/
-tm4c123gh6pm_startup_ccs_gcc.c
 *.lds
 *.launches
 
