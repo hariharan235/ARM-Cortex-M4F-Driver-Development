@@ -9,7 +9,7 @@
 
 #include "main_tm4c123gh6pm.h"
 #include "gpio_tm4c123gh6pm.h"
-
+#include "gpio.h"
 
 void initHW()
 {
@@ -64,27 +64,34 @@ int main(void)
     initHW();
 
 
-    ioTest.pGPIOx = GPIOF;
-    ioTest.gpioPinConfig.PINNUMBER = 2;
-    ioTest.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
-    ioTest.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
+//    ioTest.pGPIOx = GPIOF;
+//    ioTest.gpioPinConfig.PINNUMBER = 2;
+//    ioTest.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
+//    ioTest.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
+//
+//    GPIO_Init(&ioTest);
 
-    GPIO_Init(&ioTest);
+    pinMode("PF2", OUTPUT);
 
-    led3.pGPIOx = GPIOF;
-    led3.gpioPinConfig.PINNUMBER = 1;
-    led3.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
-    led3.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
+//    led3.pGPIOx = GPIOF;
+//    led3.gpioPinConfig.PINNUMBER = 1;
+//    led3.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
+//    led3.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
+//
+//    GPIO_Init(&led3);
 
-    GPIO_Init(&led3);
+    pinMode("PF1", OUTPUT, DIGITAL);
 
-    ioTest.pGPIOx = GPIOF;
-    ioTest.gpioPinConfig.PINNUMBER  = 4;
-    ioTest.gpioPinConfig.DIRECTION  = GPIO_DIR_INPUT;
-    ioTest.gpioPinConfig.PINMODE    = GPIO_DEN_ENABLE;
-    ioTest.gpioPinConfig.PULLUPDOWN = GPIO_PUR_ENABLE;
+//    ioTest.pGPIOx = GPIOF;
+//    ioTest.gpioPinConfig.PINNUMBER  = 4;
+//    ioTest.gpioPinConfig.DIRECTION  = GPIO_DIR_INPUT;
+//    ioTest.gpioPinConfig.PINMODE    = GPIO_DEN_ENABLE;
+//    ioTest.gpioPinConfig.PULLUPDOWN = GPIO_PUR_ENABLE;
+//
+//    GPIO_Init(&ioTest);
 
-    GPIO_Init(&ioTest);
+    pinMode("PF4", INPUT, DIGITAL, PULLUP);
+
 
     GPIOF->IM |= (1 << 4);
     NVIC->EN0 |= (1 << 30);
