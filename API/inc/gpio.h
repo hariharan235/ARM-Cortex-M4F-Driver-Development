@@ -46,6 +46,14 @@
 /*                                                                            */
 /******************************************************************************/
 
+
+/*
+ * @brief GPIO SET and DISABLE Macros
+ */
+#define HIGH      EN
+#define LOW       DS
+
+
 /*
  * @brief GPIO Direction
  */
@@ -80,9 +88,17 @@
 /******************************************************************************/
 
 
-int8_t pinMode(char *pin_port, uint8_t pinDirection,...);
+
+int8_t pinMode(char *port_pin, uint8_t pinDirection,...);
 
 
+
+
+int8_t digitalWrite(char *port_pin, uint8_t pinState);
+
+
+
+uint8_t digitalRead(char *port_pin);
 
 
 #endif /* API_INC_GPIO_H_ */

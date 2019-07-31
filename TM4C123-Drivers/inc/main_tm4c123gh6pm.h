@@ -158,13 +158,11 @@ typedef enum {
 #define DS        DISABLE
 
 
-
 /***************************************************************************/
 /*                                                                         */
 /*                       Device Memory Map                                 */
 /*                                                                         */
 /***************************************************************************/
-
 
 
 /*
@@ -218,7 +216,6 @@ typedef enum {
 #define I2C3_BASEADDR            (APBPERIPH_BASEADDR + 0x00023000UL)  /*!< Base address of I2C 3                   */
 
 #define SYSCTL_BASEADDR          (APBPERIPH_BASEADDR + 0x000FE000UL)  /*!< Base address of System Control Register */
-
 
 
 /*
@@ -621,7 +618,6 @@ typedef struct
 #define SYSCTL_LEGACY            ((SYSCTL_LEGACY_T *)SYSCTL_BASEADDR)
 
 #define NVIC                     ((NVIC_T          *)NVIC_BASEADDR)
-
 
 
 
