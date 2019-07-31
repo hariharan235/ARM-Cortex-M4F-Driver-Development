@@ -55,6 +55,8 @@ static inline void _hf_setPinDefaults(GPIO_HANDLE_T *gpioPin)
 }
 
 
+
+
 int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 {
 
@@ -112,25 +114,37 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 
     while(loopVar < numOfArgs)
     {
-        argValue = va_arg(gpioArgs, int);
+        argValue = (uint8_t)va_arg(gpioArgs, int);
 
         switch(argValue)
         {
 
         case DIGITAL:
-            gpioPin.gpioPinConfig.PINMODE = GPIO_DEN_ENABLE;
+            if(gpioPin.gpioPinConfig.PINMODE != GPIO_AMSEL_ENABLE)
+            {
+                gpioPin.gpioPinConfig.PINMODE = GPIO_DEN_ENABLE;
+            }
             break;
 
         case ANALOG:
-            gpioPin.gpioPinConfig.PINMODE = GPIO_AMSEL_ENABLE;
+            if(gpioPin.gpioPinConfig.PINMODE != GPIO_DEN_ENABLE)
+            {
+                gpioPin.gpioPinConfig.PINMODE = GPIO_AMSEL_ENABLE;
+            }
             break;
 
         case PULLUP:
-            gpioPin.gpioPinConfig.PULLUPDOWN = GPIO_PUR_ENABLE;
+            if(gpioPin.gpioPinConfig.PINMODE != GPIO_PDR_ENABLE)
+            {
+                gpioPin.gpioPinConfig.PULLUPDOWN = GPIO_PUR_ENABLE;
+            }
             break;
 
         case PULLDOWN:
-            gpioPin.gpioPinConfig.PULLUPDOWN = GPIO_PDR_ENABLE;
+            if(gpioPin.gpioPinConfig.PINMODE != GPIO_PUR_ENABLE)
+            {
+                gpioPin.gpioPinConfig.PULLUPDOWN = GPIO_PDR_ENABLE;
+            }
             break;
 
         case OPEN_DRAIN:
@@ -196,7 +210,8 @@ int8_t digitalWrite(char *port_pin, uint8_t pinState)
 
 
 
-uint8_t digitalRead(char *port_pin)
+
+int8_t digitalRead(char *port_pin)
 {
     uint8_t returnValue = 0;
     uint8_t pinNumber  = 0;
@@ -230,7 +245,7 @@ uint8_t digitalRead(char *port_pin)
     }
     else
     {
-        return 0;
+        return -1;
     }
 
     return returnValue;

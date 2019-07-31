@@ -98,7 +98,7 @@ int8_t digitalWrite(char *port_pin, uint8_t pinState);
 
 
 
-uint8_t digitalRead(char *port_pin);
+int8_t digitalRead(char *port_pin);
 
 
 #endif /* API_INC_GPIO_H_ */
