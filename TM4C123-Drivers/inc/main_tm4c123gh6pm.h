@@ -12,7 +12,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall, Hari Haran Krishnan </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall </center></h2>
  *
  * TODO Add license.
  *
