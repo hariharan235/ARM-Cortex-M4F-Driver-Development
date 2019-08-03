@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    gpio.c, file name will change
  * @author  Aditya Mall,
- * @brief   TM4C123GH6PM Device Peripheral Access Layer Header File.
+ * @brief   GPIO API Layer Source File.
  *
  *  TODO complete details
  *
@@ -46,7 +46,7 @@
 
 
 
-static inline void _hf_setPinDefaults(GPIO_HANDLE_T *gpioPin)
+static void _hf_setPinDefaults(GPIO_HANDLE_T *gpioPin)
 {
     gpioPin->gpioPinConfig.DRIVE      = GPIO_DR2R;
     gpioPin->gpioPinConfig.PINMODE    = GPIO_DEN_ENABLE;
@@ -56,7 +56,13 @@ static inline void _hf_setPinDefaults(GPIO_HANDLE_T *gpioPin)
 
 
 
-
+/*
+ * @brief   Intializes GPIO pin.
+ * @param   *port_pin : Name of the GPIO Pin
+ * @param
+ * @param
+ * @retval  None.
+ */
 int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 {
 
@@ -106,7 +112,14 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
 
     pinNumber = port_pin[2] - 48;
 
+    /* @brief Prevent user from accessing JTAG pins on GPIO Port C */
     gpioPin.gpioPinConfig.PINNUMBER = pinNumber;
+    if( (gpioPin.pGPIOx == GPIOC) && (pinNumber <= 3) )
+    {
+        return -1;
+    }
+
+
     gpioPin.gpioPinConfig.DIRECTION = pinDirection;
 
 
@@ -171,16 +184,18 @@ int8_t pinMode(char *port_pin, uint8_t pinDirection,...)
     // TODO, this should be a function pointer
     GPIO_Init(&gpioPin);
 
-
     va_end(gpioArgs);
 
     return 0;
 }
 
 
-
-
-
+/*
+ * @brief   Write to GPIO Pin
+ * @param   *port_pin : Name of the GPIO pin/
+ * @param   pinState  : Value of State to set on the pin.
+ * @retval  int8_t    : Success = 0, Failure = -1.
+ */
 int8_t digitalWrite(char *port_pin, uint8_t pinState)
 {
 
@@ -222,7 +237,11 @@ int8_t digitalWrite(char *port_pin, uint8_t pinState)
 
 
 
-
+/*
+ * @brief   Read from GPIO pin (Blocking function)
+ * @param   *port_pin : Name of the GPIO pin
+ * @retval  int8_t    : Success = Return value from the pin, Failure = -1
+ */
 int8_t digitalRead(char *port_pin)
 {
     uint8_t returnValue = 0;

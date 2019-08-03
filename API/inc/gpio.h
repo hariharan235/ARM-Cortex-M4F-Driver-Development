@@ -2,7 +2,7 @@
  ******************************************************************************
  * @file    gpio.c, file name will change
  * @author  Aditya Mall,
- * @brief   TM4C123GH6PM Device Peripheral Access Layer Header File.
+ * @brief   GPIO API Layer Header File.
  *
  *  This file contains:
  *  TODO complete details
@@ -96,16 +96,32 @@
 
 
 
+/*
+ * @brief   Intializes GPIO pin.
+ * @param   *port_pin : Name of the GPIO Pin
+ * @param
+ * @param
+ * @retval  None.
+ */
 int8_t pinMode(char *port_pin, uint8_t pinDirection,...);
 
 
 
-
+/*
+ * @brief   Write to GPIO Pin
+ * @param   *port_pin : Name of the GPIO pin/
+ * @param   pinState  : Value of State to set on the pin.
+ * @retval  int8_t    : Success = 0, Failure = -1.
+ */
 int8_t digitalWrite(char *port_pin, uint8_t pinState);
 
 
 
+/*
+ * @brief   Read from GPIO pin (Blocking function)
+ * @param   *port_pin : Name of the GPIO pin
+ * @retval  int8_t    : Success = Return value from the pin, Failure = -1
+ */
 int8_t digitalRead(char *port_pin);
-
 
 #endif /* API_INC_GPIO_H_ */

@@ -176,7 +176,7 @@
 #define GPIO_IM_ENABLE           ((uint32_t)0x01UL)  /*!< */
 
 /* @brief GPIO Interrupt Clear (GPIOICR) Register */
-#define GPIO_IC_CLEAR            ((uint32_t)0x01UL)  /*!< The corresponding interrupt is cleared by writing 1                         */
+#define GPIO_IC_CLEAR            ((uint32_t)0x01UL)  /*!< The corresponding interrupt is cleared by writing 1                        */
 
 
 /*
@@ -206,7 +206,6 @@ typedef struct
     uint8_t PULLUPDOWN;     /*!< GPIO Pin Pull-Up and Pull-Down Select                */
     uint8_t PINMODE;        /*!< GPIO Digital or Analog Register Mode Select          */
     uint8_t PCTLVAL;        /*!< GPIO Port Control Register Value                     */
-
 
 }GPIO_PIN_CONFIG_T;
 
