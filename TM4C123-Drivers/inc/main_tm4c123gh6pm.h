@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    custom_tm4c123.hgh6pm, file name will change
- * @author  Aditya Mall, Hari Haran Krishnan
+ * @author  Aditya Mall.
  * @brief   TM4C123GH6PM Device Peripheral Access Layer Header File.
  *
  *          This file contains:
@@ -12,7 +12,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall, Hari Haran Krishnan </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall </center></h2>
  *
  * TODO Add license.
  *
@@ -40,8 +40,106 @@
 #include <stdint.h>
 
 
+/*
+ * @brief Interrupt Number Definition, Idea taken from ARM header file
+ */
 
-/**
+
+typedef enum {
+
+    /* -------------------  Cortex-M4 Processor Exceptions Numbers  ------------------- */
+
+    Reset_IRQn                    = -15,              /*!<   1  Reset Vector, invoked on Power up and warm reset                 */
+    HardFault_IRQn                = -13,              /*!<   3  Hard Fault, all classes of Fault                                 */
+    SVCall_IRQn                   =  -5,              /*!<  11  System Service Call via SVC instruction                          */
+    PendSV_IRQn                   =  -2,              /*!<  14  Pendable request for system service                              */
+    SysTick_IRQn                  =  -1,              /*!<  15  System Tick Timer                                                */
+
+    /* -------------------  TM4C123GH6PM Specific Interrupt Numbers  ------------------ */
+
+    GPIOA_IRQn                    =   0,              /*!<   0  GPIOA                                                            */
+    GPIOB_IRQn                    =   1,              /*!<   1  GPIOB                                                            */
+    GPIOC_IRQn                    =   2,              /*!<   2  GPIOC                                                            */
+    GPIOD_IRQn                    =   3,              /*!<   3  GPIOD                                                            */
+    GPIOE_IRQn                    =   4,              /*!<   4  GPIOE                                                            */
+    UART0_IRQn                    =   5,              /*!<   5  UART0                                                            */
+    UART1_IRQn                    =   6,              /*!<   6  UART1                                                            */
+    SSI0_IRQn                     =   7,              /*!<   7  SSI0                                                             */
+    I2C0_IRQn                     =   8,              /*!<   8  I2C0                                                             */
+    PWM0_FAULT_IRQn               =   9,              /*!<   9  PWM0_FAULT                                                       */
+    PWM0_0_IRQn                   =  10,              /*!<  10  PWM0_0                                                           */
+    PWM0_1_IRQn                   =  11,              /*!<  11  PWM0_1                                                           */
+    PWM0_2_IRQn                   =  12,              /*!<  12  PWM0_2                                                           */
+    QEI0_IRQn                     =  13,              /*!<  13  QEI0                                                             */
+    ADC0SS0_IRQn                  =  14,              /*!<  14  ADC0SS0                                                          */
+    ADC0SS1_IRQn                  =  15,              /*!<  15  ADC0SS1                                                          */
+    ADC0SS2_IRQn                  =  16,              /*!<  16  ADC0SS2                                                          */
+    ADC0SS3_IRQn                  =  17,              /*!<  17  ADC0SS3                                                          */
+    WATCHDOG0_IRQn                =  18,              /*!<  18  WATCHDOG0                                                        */
+    TIMER0A_IRQn                  =  19,              /*!<  19  TIMER0A                                                          */
+    TIMER0B_IRQn                  =  20,              /*!<  20  TIMER0B                                                          */
+    TIMER1A_IRQn                  =  21,              /*!<  21  TIMER1A                                                          */
+    TIMER1B_IRQn                  =  22,              /*!<  22  TIMER1B                                                          */
+    TIMER2A_IRQn                  =  23,              /*!<  23  TIMER2A                                                          */
+    TIMER2B_IRQn                  =  24,              /*!<  24  TIMER2B                                                          */
+    COMP0_IRQn                    =  25,              /*!<  25  COMP0                                                            */
+    COMP1_IRQn                    =  26,              /*!<  26  COMP1                                                            */
+    SYSCTL_IRQn                   =  28,              /*!<  28  SYSCTL                                                           */
+    FLASH_CTRL_IRQn               =  29,              /*!<  29  FLASH_CTRL                                                       */
+    GPIOF_IRQn                    =  30,              /*!<  30  GPIOF                                                            */
+    UART2_IRQn                    =  33,              /*!<  33  UART2                                                            */
+    SSI1_IRQn                     =  34,              /*!<  34  SSI1                                                             */
+    TIMER3A_IRQn                  =  35,              /*!<  35  TIMER3A                                                          */
+    TIMER3B_IRQn                  =  36,              /*!<  36  TIMER3B                                                          */
+    I2C1_IRQn                     =  37,              /*!<  37  I2C1                                                             */
+    QEI1_IRQn                     =  38,              /*!<  38  QEI1                                                             */
+    CAN0_IRQn                     =  39,              /*!<  39  CAN0                                                             */
+    CAN1_IRQn                     =  40,              /*!<  40  CAN1                                                             */
+    HIB_IRQn                      =  43,              /*!<  43  HIB                                                              */
+    USB0_IRQn                     =  44,              /*!<  44  USB0                                                             */
+    PWM0_3_IRQn                   =  45,              /*!<  45  PWM0_3                                                           */
+    UDMA_IRQn                     =  46,              /*!<  46  UDMA                                                             */
+    UDMAERR_IRQn                  =  47,              /*!<  47  UDMAERR                                                          */
+    ADC1SS0_IRQn                  =  48,              /*!<  48  ADC1SS0                                                          */
+    ADC1SS1_IRQn                  =  49,              /*!<  49  ADC1SS1                                                          */
+    ADC1SS2_IRQn                  =  50,              /*!<  50  ADC1SS2                                                          */
+    ADC1SS3_IRQn                  =  51,              /*!<  51  ADC1SS3                                                          */
+    SSI2_IRQn                     =  57,              /*!<  57  SSI2                                                             */
+    SSI3_IRQn                     =  58,              /*!<  58  SSI3                                                             */
+    UART3_IRQn                    =  59,              /*!<  59  UART3                                                            */
+    UART4_IRQn                    =  60,              /*!<  60  UART4                                                            */
+    UART5_IRQn                    =  61,              /*!<  61  UART5                                                            */
+    UART6_IRQn                    =  62,              /*!<  62  UART6                                                            */
+    UART7_IRQn                    =  63,              /*!<  63  UART7                                                            */
+    I2C2_IRQn                     =  68,              /*!<  68  I2C2                                                             */
+    I2C3_IRQn                     =  69,              /*!<  69  I2C3                                                             */
+    TIMER4A_IRQn                  =  70,              /*!<  70  TIMER4A                                                          */
+    TIMER4B_IRQn                  =  71,              /*!<  71  TIMER4B                                                          */
+    TIMER5A_IRQn                  =  92,              /*!<  92  TIMER5A                                                          */
+    TIMER5B_IRQn                  =  93,              /*!<  93  TIMER5B                                                          */
+    WTIMER0A_IRQn                 =  94,              /*!<  94  WTIMER0A                                                         */
+    WTIMER0B_IRQn                 =  95,              /*!<  95  WTIMER0B                                                         */
+    WTIMER1A_IRQn                 =  96,              /*!<  96  WTIMER1A                                                         */
+    WTIMER1B_IRQn                 =  97,              /*!<  97  WTIMER1B                                                         */
+    WTIMER2A_IRQn                 =  98,              /*!<  98  WTIMER2A                                                         */
+    WTIMER2B_IRQn                 =  99,              /*!<  99  WTIMER2B                                                         */
+    WTIMER3A_IRQn                 = 100,              /*!< 100  WTIMER3A                                                         */
+    WTIMER3B_IRQn                 = 101,              /*!< 101  WTIMER3B                                                         */
+    WTIMER4A_IRQn                 = 102,              /*!< 102  WTIMER4A                                                         */
+    WTIMER4B_IRQn                 = 103,              /*!< 103  WTIMER4B                                                         */
+    WTIMER5A_IRQn                 = 104,              /*!< 104  WTIMER5A                                                         */
+    WTIMER5B_IRQn                 = 105,              /*!< 105  WTIMER5B                                                         */
+    SYSEXC_IRQn                   = 106,              /*!< 106  SYSEXC                                                           */
+    PWM1_0_IRQn                   = 134,              /*!< 134  PWM1_0                                                           */
+    PWM1_1_IRQn                   = 135,              /*!< 135  PWM1_1                                                           */
+    PWM1_2_IRQn                   = 136,              /*!< 136  PWM1_2                                                           */
+    PWM1_3_IRQn                   = 137,              /*!< 137  PWM1_3                                                           */
+    PWM1_FAULT_IRQn               = 138               /*!< 138  PWM1_FAULT                                                       */
+
+} IRQ_NUMBER_T;
+
+
+/*
  * @brief IO definitions (access restrictions to peripheral registers), idea taken from ARM header file
  */
 #define __I       volatile const       /*!< Defines 'read only' permissions    */
@@ -60,7 +158,6 @@
 #define DS        DISABLE
 
 
-
 /***************************************************************************/
 /*                                                                         */
 /*                       Device Memory Map                                 */
@@ -68,7 +165,7 @@
 /***************************************************************************/
 
 
-/**
+/*
  * @brief Base Addresses of Flash and SRAM memory
  */
 #define FLASH_BASEADDR           0x00000000UL  /*!< FLASH (up to 256 KB) base address in the alias region */
@@ -76,7 +173,7 @@
 #define SRAM_BB_BASEADDR         0x22000000UL  /*!< SRAM (32 KB) base address in the bit-band region      */
 
 
-/**
+/*
  * @brief Peripheral Bus Base Addresses
  */
 #define PERIPH_BASEADDR          0x40000000UL                      /*!< Peripheral base address in the alias region         */
@@ -85,44 +182,43 @@
 #define AHBPERIPH_BASEADDR       (PERIPH_BASEADDR + 0x00050000UL)  /*!< Base address of Advanced High Performance Bus       */
 
 
-/**
+/*
  * @brief APB Peripherals Base Addresses
  * TODO add other peripherals
  */
-#define WATCHDOG0_BASEADDR       (APBPERIPH_BASEADDR + 0x0000UL)      /*!< Base address of Watchdog timer 0                    */
-#define WATCHDOG1_BASEADDR       (APBPERIPH_BASEADDR + 0x1000UL)      /*!< Base address of Watchdog timer 1                    */
+#define WATCHDOG0_BASEADDR       (APBPERIPH_BASEADDR + 0x0000UL)      /*!< Base address of Watchdog timer 0        */
+#define WATCHDOG1_BASEADDR       (APBPERIPH_BASEADDR + 0x1000UL)      /*!< Base address of Watchdog timer 1        */
 
-#define GPIOA_BASEADDR           (APBPERIPH_BASEADDR + 0x4000UL)      /*!< Base address of GPIO Port A                         */
-#define GPIOB_BASEADDR           (APBPERIPH_BASEADDR + 0x5000UL)      /*!< Base address of GPIO Port B                         */
-#define GPIOC_BASEADDR           (APBPERIPH_BASEADDR + 0x6000UL)      /*!< Base address of GPIO Port C                         */
-#define GPIOD_BASEADDR           (APBPERIPH_BASEADDR + 0x7000UL)      /*!< Base address of GPIO Port D                         */
-#define GPIOE_BASEADDR           (APBPERIPH_BASEADDR + 0x00024000UL)  /*!< Base address of GPIO Port E                         */
-#define GPIOF_BASEADDR           (APBPERIPH_BASEADDR + 0x00025000UL)  /*!< Base address of GPIO Port F                         */
+#define GPIOA_BASEADDR           (APBPERIPH_BASEADDR + 0x4000UL)      /*!< Base address of GPIO Port A             */
+#define GPIOB_BASEADDR           (APBPERIPH_BASEADDR + 0x5000UL)      /*!< Base address of GPIO Port B             */
+#define GPIOC_BASEADDR           (APBPERIPH_BASEADDR + 0x6000UL)      /*!< Base address of GPIO Port C             */
+#define GPIOD_BASEADDR           (APBPERIPH_BASEADDR + 0x7000UL)      /*!< Base address of GPIO Port D             */
+#define GPIOE_BASEADDR           (APBPERIPH_BASEADDR + 0x00024000UL)  /*!< Base address of GPIO Port E             */
+#define GPIOF_BASEADDR           (APBPERIPH_BASEADDR + 0x00025000UL)  /*!< Base address of GPIO Port F             */
 
-#define SSI0_BASEADDR            (APBPERIPH_BASEADDR + 0x8000UL)      /*!< Base address of SSI0                                */
-#define SSI1_BASEADDR            (APBPERIPH_BASEADDR + 0x9000UL)      /*!< Base address of SSI1                                */
-#define SSI2_BASEADDR            (APBPERIPH_BASEADDR + 0xA000UL)      /*!< Base address of SSI2                                */
-#define SSI3_BASEADDR            (APBPERIPH_BASEADDR + 0xB000UL)      /*!< Base address of SSI3                                */
+#define SSI0_BASEADDR            (APBPERIPH_BASEADDR + 0x8000UL)      /*!< Base address of SSI0                    */
+#define SSI1_BASEADDR            (APBPERIPH_BASEADDR + 0x9000UL)      /*!< Base address of SSI1                    */
+#define SSI2_BASEADDR            (APBPERIPH_BASEADDR + 0xA000UL)      /*!< Base address of SSI2                    */
+#define SSI3_BASEADDR            (APBPERIPH_BASEADDR + 0xB000UL)      /*!< Base address of SSI3                    */
 
-#define UART0_BASEADDR           (APBPERIPH_BASEADDR + 0xC000UL)      /*!< Base address of UART0                               */
-#define UART1_BASEADDR           (APBPERIPH_BASEADDR + 0xD000UL)      /*!< Base address of UART1                               */
-#define UART2_BASEADDR           (APBPERIPH_BASEADDR + 0xE000UL)      /*!< Base address of UART2                               */
-#define UART3_BASEADDR           (APBPERIPH_BASEADDR + 0xF000UL)      /*!< Base address of UART3                               */
-#define UART4_BASEADDR           (APBPERIPH_BASEADDR + 0x00010000UL)  /*!< Base address of UART4                               */
-#define UART5_BASEADDR           (APBPERIPH_BASEADDR + 0x00011000UL)  /*!< Base address of UART5                               */
-#define UART6_BASEADDR           (APBPERIPH_BASEADDR + 0x00012000UL)  /*!< Base address of UART6                               */
-#define UART7_BASEADDR           (APBPERIPH_BASEADDR + 0x00013000UL)  /*!< Base address of UART7                               */
+#define UART0_BASEADDR           (APBPERIPH_BASEADDR + 0xC000UL)      /*!< Base address of UART0                   */
+#define UART1_BASEADDR           (APBPERIPH_BASEADDR + 0xD000UL)      /*!< Base address of UART1                   */
+#define UART2_BASEADDR           (APBPERIPH_BASEADDR + 0xE000UL)      /*!< Base address of UART2                   */
+#define UART3_BASEADDR           (APBPERIPH_BASEADDR + 0xF000UL)      /*!< Base address of UART3                   */
+#define UART4_BASEADDR           (APBPERIPH_BASEADDR + 0x00010000UL)  /*!< Base address of UART4                   */
+#define UART5_BASEADDR           (APBPERIPH_BASEADDR + 0x00011000UL)  /*!< Base address of UART5                   */
+#define UART6_BASEADDR           (APBPERIPH_BASEADDR + 0x00012000UL)  /*!< Base address of UART6                   */
+#define UART7_BASEADDR           (APBPERIPH_BASEADDR + 0x00013000UL)  /*!< Base address of UART7                   */
 
-#define I2C0_BASEADDR            (APBPERIPH_BASEADDR + 0x00020000UL)  /*!< Base address of I2C 0                               */
-#define I2C1_BASEADDR            (APBPERIPH_BASEADDR + 0x00021000UL)  /*!< Base address of I2C 1                               */
-#define I2C2_BASEADDR            (APBPERIPH_BASEADDR + 0x00022000UL)  /*!< Base address of I2C 2                               */
-#define I2C3_BASEADDR            (APBPERIPH_BASEADDR + 0x00023000UL)  /*!< Base address of I2C 3                               */
+#define I2C0_BASEADDR            (APBPERIPH_BASEADDR + 0x00020000UL)  /*!< Base address of I2C 0                   */
+#define I2C1_BASEADDR            (APBPERIPH_BASEADDR + 0x00021000UL)  /*!< Base address of I2C 1                   */
+#define I2C2_BASEADDR            (APBPERIPH_BASEADDR + 0x00022000UL)  /*!< Base address of I2C 2                   */
+#define I2C3_BASEADDR            (APBPERIPH_BASEADDR + 0x00023000UL)  /*!< Base address of I2C 3                   */
 
-#define SYSCTL_BASEADDR          (APBPERIPH_BASEADDR + 0x000FE000UL)  /*!< Base address of System Control Block                */
+#define SYSCTL_BASEADDR          (APBPERIPH_BASEADDR + 0x000FE000UL)  /*!< Base address of System Control Register */
 
 
-
-/**
+/*
  * @brief AHB Peripherals Base Addresses
  */
 #define USB_BASEADDR             (AHBPERIPH_BASEADDR + 0x0000UL)  /*!< Base address of USB                        */
@@ -135,6 +231,14 @@
 
 
 
+/*
+ * @brief Base Addresses of Core Peripherals
+ */
+#define COREPERIPH_BASEADDR      0xE000E000UL                      /*!< Processor Core Peripheral base address */
+#define SYSTIC_BASEADDR          (COREPERIPH_BASEADDR + 0x0010UL)  /*!< SysTick Base Address                   */
+#define NVIC_BASEADDR            (COREPERIPH_BASEADDR + 0x0100UL)  /*!< NVIC Base Address                      */
+
+
 
 
 /***************************************************************************/
@@ -144,14 +248,91 @@
 /***************************************************************************/
 
 
+/*
+ * @brief Cortex M-4 Processor Core Peripheral Register
+ */
 
-/**
+typedef struct
+{
+    __IO uint32_t EN0;             /*!< Interrupt 0-31 Set Enable,        Address offset: 0x100 */
+    __IO uint32_t EN1;             /*!< Interrupt 32-63 Set Enable,       Address offset: 0x104 */
+    __IO uint32_t EN2;             /*!< Interrupt 64-95 Set Enable,       Address offset: 0x108 */
+    __IO uint32_t EN3;             /*!< Interrupt 96-127 Set Enable,      Address offset: 0x10C */
+    __IO uint32_t EN4;             /*!< Interrupt 128-138 Set Enable,     Address offset: 0x110 */
+    __IO uint32_t RESERVED[27];    /*!< RESERVED,                         Address offset: 0x17C */
+    __IO uint32_t DISO;            /*!< Interrupt 0-31 Clear Enable,      Address offset: 0x180 */
+    __IO uint32_t DIS1;            /*!< Interrupt 32-63 Clear Enable,     Address offset: 0x184 */
+    __IO uint32_t DIS2;            /*!< Interrupt 64-95 Clear Enable,     Address offset: 0x188 */
+    __IO uint32_t DIS3;            /*!< Interrupt 96-127 Clear Enable,    Address offset: 0x18C */
+    __IO uint32_t DIS4;            /*!< Interrupt 128-138 Clear Enable,   Address offset: 0x190 */
+    __IO uint32_t RESERVED1[27];   /*!< RESERVED,                         Address offset: 0x1FC */
+    __IO uint32_t PENDO;           /*!< Interrupt 0-31 Set Pending,       Address offset: 0x200 */
+    __IO uint32_t PEND1;           /*!< Interrupt 32-63 Set Pending,      Address offset: 0x204 */
+    __IO uint32_t PEND2;           /*!< Interrupt 64-95 Set Pending,      Address offset: 0x208 */
+    __IO uint32_t PEND3;           /*!< Interrupt 96-127 Set Pending,     Address offset: 0x20C */
+    __IO uint32_t PEND4;           /*!< Interrupt 128-138 Set Pending,    Address offset: 0x210 */
+    __IO uint32_t RESERVED2[27];   /*!< RESERVED,                         Address offset: 0x280 */
+    __IO uint32_t UNPENDO;         /*!< Interrupt 0-31 Clear Pending,     Address offset: 0x280 */
+    __IO uint32_t UNPEND1;         /*!< Interrupt 32-63 Clear Pending,    Address offset: 0x284 */
+    __IO uint32_t UNPEND2;         /*!< Interrupt 64-95 Clear Pending,    Address offset: 0x288 */
+    __IO uint32_t UNPEND3;         /*!< Interrupt 96-127 Clear Pending,   Address offset: 0x28C */
+    __IO uint32_t UNPEND4;         /*!< Interrupt 128-138 Clear Pending,  Address offset: 0x290 */
+    __IO uint32_t RESERVED3[27];   /*!< RESERVED,                         Address offset: 0x2FC */
+    __IO uint32_t ACTIVE0;         /*!< Interrupt 0-31 Active Bit,        Address offset: 0x300 */
+    __IO uint32_t ACTIVE1;         /*!< Interrupt 32-63 Active Bit,       Address offset: 0x304 */
+    __IO uint32_t ACTIVE2;         /*!< Interrupt 64-95 Active Bit,       Address offset: 0x308 */
+    __IO uint32_t ACTIVE3;         /*!< Interrupt 96-127 Active Bit,      Address offset: 0x30C */
+    __IO uint32_t ACTIVE4;         /*!< Interrupt 128-138 Active Bit,     Address offset: 0x310 */
+    __IO uint32_t RESERVED4[59];   /*!< RESERVED,                         Address offset: 0x3FC */
+    __IO uint32_t PRIO;            /*!< Interrupt 0-3 Priority,           Address offset: 0x400 */
+    __IO uint32_t PRI1;            /*!< Interrupt 4-7 Priority,           Address offset: 0x404 */
+    __IO uint32_t PRI2;            /*!< Interrupt 8-11 Priority,          Address offset: 0x408 */
+    __IO uint32_t PRI3;            /*!< Interrupt 12-15 Priority,         Address offset: 0x40C */
+    __IO uint32_t PRI4;            /*!< Interrupt 16-19 Priority,         Address offset: 0x410 */
+    __IO uint32_t PRI5;            /*!< Interrupt 20-23 Priority,         Address offset: 0x414 */
+    __IO uint32_t PRI6;            /*!< Interrupt 24-27 Priority,         Address offset: 0x418 */
+    __IO uint32_t PRI7;            /*!< Interrupt 28-31 Priority,         Address offset: 0x41C */
+    __IO uint32_t PRI8;            /*!< Interrupt 32-35 Priority,         Address offset: 0x420 */
+    __IO uint32_t PRI9;            /*!< Interrupt 36-39 Priority,         Address offset: 0x424 */
+    __IO uint32_t PRI1O;           /*!< Interrupt 40-43 Priority,         Address offset: 0x428 */
+    __IO uint32_t PRI11;           /*!< Interrupt 44-47 Priority,         Address offset: 0x42C */
+    __IO uint32_t PRI12;           /*!< Interrupt 48-51 Priority,         Address offset: 0x430 */
+    __IO uint32_t PRI13;           /*!< Interrupt 52-55 Priority,         Address offset: 0x434 */
+    __IO uint32_t PRI14;           /*!< Interrupt 56-59 Priority,         Address offset: 0x438 */
+    __IO uint32_t PRI15;           /*!< Interrupt 60-63 Priority,         Address offset: 0x43C */
+    __IO uint32_t PRI16;           /*!< Interrupt 64-67 Priority,         Address offset: 0x440 */
+    __IO uint32_t PRI17;           /*!< Interrupt 68-71 Priority,         Address offset: 0x444 */
+    __IO uint32_t PRI18;           /*!< Interrupt 72-75 Priority,         Address offset: 0x448 */
+    __IO uint32_t PRI19;           /*!< Interrupt 76-79 Priority,         Address offset: 0x44C */
+    __IO uint32_t PRI20;           /*!< Interrupt 80-83 Priority,         Address offset: 0x450 */
+    __IO uint32_t PRI21;           /*!< Interrupt 84-87 Priority,         Address offset: 0x454 */
+    __IO uint32_t PRI22;           /*!< Interrupt 88-91 Priority,         Address offset: 0x458 */
+    __IO uint32_t PRI23;           /*!< Interrupt 92-95 Priority,         Address offset: 0x45C */
+    __IO uint32_t PRI24;           /*!< Interrupt 96-99 Priority,         Address offset: 0x460 */
+    __IO uint32_t PRI25;           /*!< Interrupt 100-103 Priority,       Address offset: 0x464 */
+    __IO uint32_t PRI26;           /*!< Interrupt 104-107 Priority,       Address offset: 0x468 */
+    __IO uint32_t PRI27;           /*!< Interrupt 108-111 Priority,       Address offset: 0x46C */
+    __IO uint32_t PRI28;           /*!< Interrupt 112-115 Priority,       Address offset: 0x470 */
+    __IO uint32_t PRI29;           /*!< Interrupt 116-119 Priority,       Address offset: 0x474 */
+    __IO uint32_t PRI30;           /*!< Interrupt 120-123 Priority,       Address offset: 0x478 */
+    __IO uint32_t PRI31;           /*!< Interrupt 124-127 Priority,       Address offset: 0x47C */
+    __IO uint32_t PRI32;           /*!< Interrupt 128-131 Priority,       Address offset: 0x480 */
+    __IO uint32_t PRI33;           /*!< Interrupt 132-135 Priority,       Address offset: 0x484 */
+    __IO uint32_t PRI34;           /*!< Interrupt 136-138 Priority,       Address offset: 0x488 */
+    __IO uint32_t RESERVED5[669];  /*!< RESERVED,                         Address offset: 0xEFC */
+    __IO uint32_t SWTRIG;          /*!< Software Trigger Interrupt,       Address offset: 0xF00 */
+
+} NVIC_T;
+
+
+
+/*
  * @brief Peripheral Register Structures
  */
 
 
 
-/**
+/*
  * @brief System Control Register Structure
  */
 typedef struct
@@ -331,7 +512,7 @@ typedef struct
 
 
 
-/**
+/*
  * @brief System Control Legacy Register Structure
  */
 typedef struct
@@ -372,24 +553,23 @@ typedef struct
 
 
 
-
-/**
+/*
  * @brief General-Purpose Input/Outputs
  * TODO complete Address offsets
  */
 typedef struct
 {
-    __I  uint32_t BITMASK[255];  /*!< GPIO [9:2] register mask space, see Data Sheet,  Address offset: 0x000 */
-    __IO uint32_t DATA;          /*!< GPIO Data,                                       Address offset: 0x000 */
-    __IO uint32_t DIR;           /*!< GPIO Direction,                                  Address offset: 0x000 */
-    __IO uint32_t IS;            /*!< GPIO Interrupt Sense,                            Address offset: 0x000 */
-    __IO uint32_t IBE;           /*!< GPIO Interrupt Both Edges,                       Address offset: 0x000 */
-    __IO uint32_t IEV;           /*!< GPIO Interrupt Event,                            Address offset: 0x000 */
-    __IO uint32_t IM;            /*!< GPIO Interrupt Mask,                             Address offset: 0x000 */
-    __IO uint32_t RIS;           /*!< GPIO Raw Interrupt Status,                       Address offset: 0x000 */
-    __IO uint32_t MIS;           /*!< GPIO Masked Interrupt Status,                    Address offset: 0x000 */
-    __O  uint32_t ICR;           /*!< GPIO Interrupt Clear,                            Address offset: 0x000 */
-    __IO uint32_t AFSEL;         /*!< GPIO Alternate Function Select,                  Address offset: 0x000 */
+    __I  uint32_t BITMASK[255];  /*!< GPIO [9:2] register mask space, see Data Sheet,  Address offset: 0x3FC */
+    __IO uint32_t DATA;          /*!< GPIO Data,                                       Address offset: 0x400 */
+    __IO uint32_t DIR;           /*!< GPIO Direction,                                  Address offset: 0x404 */
+    __IO uint32_t IS;            /*!< GPIO Interrupt Sense,                            Address offset: 0x408 */
+    __IO uint32_t IBE;           /*!< GPIO Interrupt Both Edges,                       Address offset: 0x40C */
+    __IO uint32_t IEV;           /*!< GPIO Interrupt Event,                            Address offset: 0x410 */
+    __IO uint32_t IM;            /*!< GPIO Interrupt Mask,                             Address offset: 0x414 */
+    __IO uint32_t RIS;           /*!< GPIO Raw Interrupt Status,                       Address offset: 0x418 */
+    __IO uint32_t MIS;           /*!< GPIO Masked Interrupt Status,                    Address offset: 0x41C */
+    __O  uint32_t ICR;           /*!< GPIO Interrupt Clear,                            Address offset: 0x420 */
+    __IO uint32_t AFSEL;         /*!< GPIO Alternate Function Select,                  Address offset: 0x400 */
     __I  uint32_t RESERVED[55];  /*!< RESERVED,                                        Address offset: 0x000 */
     __IO uint32_t DR2R;          /*!< GPIO 2-mA Drive Select,                          Address offset: 0x000 */
     __IO uint32_t DR4R;          /*!< GPIO 4-mA Drive Select,                          Address offset: 0x000 */
@@ -417,7 +597,7 @@ typedef struct
 /***************************************************************************/
 
 
-/**
+/*
  * @brief Peripheral Declarations
  */
 #define GPIOA                    ((GPIO_PORT_T *) GPIOA_BASEADDR)
@@ -434,10 +614,10 @@ typedef struct
 #define GPIOE_AHB                ((GPIO_PORT_T *) GPIOE_AHB_BASEADDR)
 #define GPIOF_AHB                ((GPIO_PORT_T *) GPIOF_AHB_BASEADDR)
 
-#define SYSCTL                   ((SYSCTL_T *)SYSCTL_BASEADDR)
-#define SYSCTL_LEGACY            ((SYSCTL_LEGACY_T*)SYSCTL_BASEADDR)
+#define SYSCTL                   ((SYSCTL_T        *)SYSCTL_BASEADDR)
+#define SYSCTL_LEGACY            ((SYSCTL_LEGACY_T *)SYSCTL_BASEADDR)
 
-
+#define NVIC                     ((NVIC_T          *)NVIC_BASEADDR)
 
 
 

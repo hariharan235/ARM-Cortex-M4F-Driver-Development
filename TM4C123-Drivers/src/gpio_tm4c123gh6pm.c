@@ -11,7 +11,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall, Hari Haran Krishnan </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall </center></h2>
  *
  * TODO Add license, add your name as you make changes
  *
@@ -38,7 +38,7 @@
 
 /******************************************************************************/
 /*                                                                            */
-/*                       Driver API Functions                                 */
+/*                       Peripheral Driver Functions                          */
 /*                                                                            */
 /******************************************************************************/
 
@@ -161,10 +161,14 @@ void GPIO_Init(GPIO_HANDLE_T *pGPIOHandle)
     {
 
     case GPIO_DEN_ENABLE:
+        pGPIOHandle->pGPIOx->AMSEL &= ~(1 << pGPIOHandle->gpioPinConfig.PINNUMBER);
+        pGPIOHandle->pGPIOx->DEN   &= ~(1 << pGPIOHandle->gpioPinConfig.PINNUMBER);
         pGPIOHandle->pGPIOx->DEN   |= (1 << pGPIOHandle->gpioPinConfig.PINNUMBER);
         break;
 
     case GPIO_AMSEL_ENABLE:
+        pGPIOHandle->pGPIOx->DEN   &= ~(1 << pGPIOHandle->gpioPinConfig.PINNUMBER);
+        pGPIOHandle->pGPIOx->AMSEL &= ~(1 << pGPIOHandle->gpioPinConfig.PINNUMBER);
         pGPIOHandle->pGPIOx->AMSEL |= (1 << pGPIOHandle->gpioPinConfig.PINNUMBER);
         break;
 
@@ -216,7 +220,7 @@ uint8_t GPIO_ReadFromPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber)
 
     uint8_t retVal = 0;                     /*!< Variable to store the return value of the pin                       */
 
-    retVal = (pGPIOx->DATA >> pinNumber);  /*!< Shift value from the pin to LSB and mask it with 0xFF (Masking bit) */
+    retVal = (pGPIOx->DATA >> pinNumber);   /*!< Shift value from the pin to LSB and mask it with 0xFF (Masking bit) */
 
     return retVal;
 }

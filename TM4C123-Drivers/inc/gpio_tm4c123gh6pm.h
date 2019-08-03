@@ -14,7 +14,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall, Hari Haran Krishnan </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall </center></h2>
  *
  * TODO Add license, add your name as you make changes
  *
@@ -39,7 +39,7 @@
 
 
 /*
- * @brief Standard Headers
+ * @brief Standard Headers and board specific header file
  */
 #include "main_tm4c123gh6pm.h"
 #include <stdint.h>
@@ -106,6 +106,7 @@
 #define PCTL_AF14                ((uint32_t)0x0EUL)  /*!< Bit Field Encoding of Alternate Function 14 */
 #define PCTL_AF15                ((uint32_t)0x0FUL)  /*!< Bit Field Encoding of Alternate Function 15 */
 
+
 /*
  * @brief UART Module 0, 1, 2, 3, 4, 5, 6, and 7 Defines
  */
@@ -166,8 +167,6 @@
 
 
 
-
-
 /* @brief GPIO Interrupt Event (GPIOIEV) Register */
 #define GPIO_EV_FALLING_EDGE     ((uint32_t)0x00UL)  /*!< */
 #define GPIO_EV_RISING_EDGE      ((uint32_t)0x01UL)  /*!< */
@@ -177,7 +176,7 @@
 #define GPIO_IM_ENABLE           ((uint32_t)0x01UL)  /*!< */
 
 /* @brief GPIO Interrupt Clear (GPIOICR) Register */
-#define GPIO_IC_CLEAR            ((uint32_t)0x01UL)  /*!< The corresponding interrupt is cleared by writing 1                         */
+#define GPIO_IC_CLEAR            ((uint32_t)0x01UL)  /*!< The corresponding interrupt is cleared by writing 1                        */
 
 
 /*
@@ -199,7 +198,7 @@
 /*TODO Add slew rate control */
 typedef struct
 {
-    uint8_t PINNUMBER;
+    uint8_t PINNUMBER;      /*!< GPIO Pin Number                                      */
     uint8_t DIRECTION;      /*!< GPIO Pin Direction                                   */
     uint8_t ALTERNATEFUNC;  /*!< GPIO Pin Alternate Function                          */
     uint8_t DRIVE;          /*!< GPIO Pin Drive Select, GPIODR2R, GPIODR4R, GPIODR8R  */
@@ -207,7 +206,6 @@ typedef struct
     uint8_t PULLUPDOWN;     /*!< GPIO Pin Pull-Up and Pull-Down Select                */
     uint8_t PINMODE;        /*!< GPIO Digital or Analog Register Mode Select          */
     uint8_t PCTLVAL;        /*!< GPIO Port Control Register Value                     */
-
 
 }GPIO_PIN_CONFIG_T;
 
@@ -224,10 +222,9 @@ typedef struct
 
 /******************************************************************************/
 /*                                                                            */
-/*                      Driver API Function Prototypes                        */
+/*                 Peripheral Driver Functions Prototypes                     */
 /*                                                                            */
 /******************************************************************************/
-
 
 
 
@@ -239,12 +236,14 @@ typedef struct
 void GPIO_Init(GPIO_HANDLE_T *pGPIOHandle);
 
 
+
 /*
  * @brief   Deinitialize GPIO pin.
  * @param   *pGPIOHandle : pointer to the GPIO Handle structure (GPIO_HANDLE_T).
  * @retval  None.
  */
 void GPIO_DeInit(GPIO_HANDLE_T *pGPIOHandle);
+
 
 
 /*
@@ -254,6 +253,7 @@ void GPIO_DeInit(GPIO_HANDLE_T *pGPIOHandle);
  * @retval  uint8_t   : Return value from the pin.
  */
 uint8_t GPIO_ReadFromPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber);
+
 
 
 /*
@@ -266,12 +266,14 @@ uint8_t GPIO_ReadFromPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber);
 void GPIO_WriteToPin(GPIO_PORT_T *pGPIOx, uint8_t pinNumber, bool value);
 
 
+
 /*
  * @brief   Read from GPIO port (Blocking function)
  * @param   *pGPIOx  : pointer to the GPIO port structure (GPIO_PORT_T).
  * @retval  uint8_t  : Data from the port
  */
 uint8_t GPIO_ReadFromPort(GPIO_PORT_T *pGPIOx);
+
 
 
 /*
@@ -281,6 +283,7 @@ uint8_t GPIO_ReadFromPort(GPIO_PORT_T *pGPIOx);
  * @retval  None.
  */
 void GPIO_WriteToPort(GPIO_PORT_T *pGPIOx, uint8_t value);
+
 
 
 /*
