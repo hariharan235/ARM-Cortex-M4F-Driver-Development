@@ -12,11 +12,11 @@
 #define BTN_PRESSED 1
 #define EX_BTN_PRESSED 0
 
-//#define test1 /*!< Test Onboard-led toggle - Pass*/
+#define test1 /*!< Test Onboard-led toggle - Pass*/
 //#define test2 /*!< Test On board-pushbutton - Pass */
 //#define test3 /*!< Test GPIO read using external pushbutton (Test read fns) - Pass*/
 //#define test4 /*!< Test GPIO write using external led (Test write fns) - Pass */
-#define test5 /*!< IRQ config and handler - Pass */
+//#define test5 /*!< IRQ config and handler - Pass */
 
 void delay()
 {

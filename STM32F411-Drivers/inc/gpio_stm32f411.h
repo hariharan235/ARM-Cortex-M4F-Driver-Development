@@ -44,6 +44,9 @@
 
 #include "stm32f411xe.h"
 
+#ifdef __cplusplus
+ extern "C" {
+#endif /* __cplusplus */
 
  /*!@brief
   *
@@ -297,6 +300,8 @@ void GPIO_IRQConfig(uint8_t IRQNumber , uint8_t setState);                      
 void GPIO_IRQPriorityConfig(uint8_t IRQNumber , uint8_t IRQPriority);                              /*!<Function to configure Interrupt priority */
 void GPIO_IRQHandler(uint8_t pinNumber);                                                           /*!<Function to process triggered interrupts*/
 
-
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* INCLUDE_STM32F4XX_GPIO_STM32F411_H_ */
