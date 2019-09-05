@@ -50,17 +50,17 @@
  * @fn               - GPIO_PprlClkCtrl
  * @brief            - Function to enable/disable peripheral clock for the GPIO port
  * @param[in]        - Base Address of the GPIO peripheral
- * @param[in]        - ENABLE / DISABLE macros
+ * @param[in]        - ENABLE / DISABLE
  * @return           - None
  * @note             - None
  */
 
-void GPIO_PprlClkCtrl(GPIO_TypeDef* pGPIO , uint8_t setState)
+void GPIO_PprlClkCtrl(GPIO_TypeDef* pGPIO , GPIO_clk_ctrl_t setState)
 {
 
 	assert(pGPIO);
-	assert((setState==ENABLE || setState == DISABLE));
-	if(setState == ENABLE)
+
+	if(setState == GPIO_CLK_ENABLE)
 	{
 
 		if(pGPIO == GPIOA)
@@ -148,99 +148,99 @@ void GPIO_Init(GPIO_handle_t *pGPIOHandle)
 
 	/*!< Configure GPIO Pin Mode */
 
-    if(pGPIOHandle->GPIO_PinConfig.PINMODE <= GPIO_MODE_ANALOG)
-    {
-    	/*!< Non-Interrupt Configuration */
+	if(pGPIOHandle->GPIO_PinConfig.PINMODE <= GPIO_MODE_ANALOG)
+	{
+		/*!< Non-Interrupt Configuration */
 
-    	pGPIOHandle->pGPIO->MODER &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
-    	pGPIOHandle->pGPIO->MODER |= ((pGPIOHandle->GPIO_PinConfig.PINMODE) << (2 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set GPIO Pin Mode */
+		pGPIOHandle->pGPIO->MODER &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
+		pGPIOHandle->pGPIO->MODER |= ((pGPIOHandle->GPIO_PinConfig.PINMODE) << (2 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set GPIO Pin Mode */
 
-    }
-    else
-    {
-    	if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_IN_FE)
-    	{
+	}
+	else
+	{
+		if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_IN_FE)
+		{
 
-    		/*!< Configure FTSR */
+			/*!< Configure FTSR */
 
-    		EXTI->FTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
+			EXTI->FTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
 
-    		/*!< Clear RTSR bit */
+			/*!< Clear RTSR bit */
 
-    		EXTI->RTSR &= ~(1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
-    	}
-    	else if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_IN_RE)
-    	{
-    		/*!< Configure RTSR */
+			EXTI->RTSR &= ~(1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
+		}
+		else if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_IN_RE)
+		{
+			/*!< Configure RTSR */
 
-    		EXTI->RTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
+			EXTI->RTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
 
-    		/*!< Clear FTSR bit */
+			/*!< Clear FTSR bit */
 
-    		EXTI->FTSR &= ~(1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
-    	}
-    	else if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_IN_FRE)
-    	{
-    		/*!< Configure FTSR */
+			EXTI->FTSR &= ~(1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
+		}
+		else if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_IN_FRE)
+		{
+			/*!< Configure FTSR */
 
-    		EXTI->FTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
+			EXTI->FTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
 
-    		/*!< Configure RTSR */
+			/*!< Configure RTSR */
 
-    		EXTI->RTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
-    	}
-    	else
-    		assert(0);
-
-
-    	/*!< System configuration clock */
-
-    	RCC->APB2ENR |= (1 << 14);
-
-    	/*!< EXTI control */
-
-    	SYSCFG->EXTICR[(pGPIOHandle->GPIO_PinConfig.PINNUMBER >> 2)] |= (GPIO_PORT_CODE(pGPIOHandle->pGPIO) << (4 *(pGPIOHandle->GPIO_PinConfig.PINNUMBER & 3)));
-
-    	/*!< Enable Interrupt delivery to NVIC */
-
-    	EXTI->IMR |= (0x01 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
-
-    }
-
-    /*!< Configure GPIO Pin Speed */
-
-    pGPIOHandle->pGPIO->OSPEEDR &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
-    pGPIOHandle->pGPIO->OSPEEDR |= ((pGPIOHandle->GPIO_PinConfig.PINSPEED) << (2 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set GPIO Pin Output Speed */
+			EXTI->RTSR |= (1 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
+		}
+		else
+			assert(0);
 
 
-    /*!< Configure GPIO Pull-up and Pull-down resistors for GPIO pin */
+		/*!< System configuration clock */
 
-    pGPIOHandle->pGPIO->PUPDR &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
-    pGPIOHandle->pGPIO->PUPDR |= ((pGPIOHandle->GPIO_PinConfig.PINPULLPDCONTROL) << (2 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set Pull-up or Pull-down for GPIO Pin */
+		RCC->APB2ENR |= (1 << 14);
 
-    /*!< Configure GPIO Output Type  */
+		/*!< EXTI control */
 
-    pGPIOHandle->pGPIO->OTYPER &= ~(0x01 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
-    pGPIOHandle->pGPIO->OTYPER |= ((pGPIOHandle->GPIO_PinConfig.PINOPTYPE) << (pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set GPIO Pin Output Type */
+		SYSCFG->EXTICR[(pGPIOHandle->GPIO_PinConfig.PINNUMBER >> 2)] |= (GPIO_PORT_CODE(pGPIOHandle->pGPIO) << (4 *(pGPIOHandle->GPIO_PinConfig.PINNUMBER & 3)));
 
-    /*!< Configure Alternate Function */
+		/*!< Enable Interrupt delivery to NVIC */
 
-    if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_ALTFN)
-    {
+		EXTI->IMR |= (0x01 << pGPIOHandle->GPIO_PinConfig.PINNUMBER);
 
-    	if(pGPIOHandle->GPIO_PinConfig.PINNUMBER <= 7)
-    	{
-    		pGPIOHandle->pGPIO->AFR[0] &= ~(0x0F << (4 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Clear the bit fields*/
-    	    pGPIOHandle->pGPIO->AFR[0] |= ((pGPIOHandle->GPIO_PinConfig.PINALTFNMODE) << (4 *pGPIOHandle->GPIO_PinConfig.PINNUMBER));
-    	}
-    	else
-    	{
-    		pGPIOHandle->pGPIO->AFR[1] &= ~(0x0F << (4 *(pGPIOHandle->GPIO_PinConfig.PINNUMBER & 3))); /*!< Clear the bit fields*/
-    		pGPIOHandle->pGPIO->AFR[1] |= ((pGPIOHandle->GPIO_PinConfig.PINALTFNMODE) << (4 *(pGPIOHandle->GPIO_PinConfig.PINNUMBER & 3)));
+	}
 
-    	}
+	/*!< Configure GPIO Pin Speed */
 
-    }
+	pGPIOHandle->pGPIO->OSPEEDR &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
+	pGPIOHandle->pGPIO->OSPEEDR |= ((pGPIOHandle->GPIO_PinConfig.PINSPEED) << (2 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set GPIO Pin Output Speed */
+
+
+	/*!< Configure GPIO Pull-up and Pull-down resistors for GPIO pin */
+
+	pGPIOHandle->pGPIO->PUPDR &= ~(0x03 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
+	pGPIOHandle->pGPIO->PUPDR |= ((pGPIOHandle->GPIO_PinConfig.PINPULLPDCONTROL) << (2 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set Pull-up or Pull-down for GPIO Pin */
+
+	/*!< Configure GPIO Output Type  */
+
+	pGPIOHandle->pGPIO->OTYPER &= ~(0x01 << pGPIOHandle->GPIO_PinConfig.PINNUMBER); /*!< Clear the bit fields*/
+	pGPIOHandle->pGPIO->OTYPER |= ((pGPIOHandle->GPIO_PinConfig.PINOPTYPE) << (pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Set GPIO Pin Output Type */
+
+	/*!< Configure Alternate Function */
+
+	if(pGPIOHandle->GPIO_PinConfig.PINMODE == GPIO_MODE_ALTFN)
+	{
+
+		if(pGPIOHandle->GPIO_PinConfig.PINNUMBER <= 7)
+		{
+			pGPIOHandle->pGPIO->AFR[0] &= ~(0x0F << (4 * pGPIOHandle->GPIO_PinConfig.PINNUMBER)); /*!< Clear the bit fields*/
+			pGPIOHandle->pGPIO->AFR[0] |= ((pGPIOHandle->GPIO_PinConfig.PINALTFNMODE) << (4 *pGPIOHandle->GPIO_PinConfig.PINNUMBER));
+		}
+		else
+		{
+			pGPIOHandle->pGPIO->AFR[1] &= ~(0x0F << (4 *(pGPIOHandle->GPIO_PinConfig.PINNUMBER & 3))); /*!< Clear the bit fields*/
+			pGPIOHandle->pGPIO->AFR[1] |= ((pGPIOHandle->GPIO_PinConfig.PINALTFNMODE) << (4 *(pGPIOHandle->GPIO_PinConfig.PINNUMBER & 3)));
+
+		}
+
+	}
 
 }
 
@@ -260,37 +260,37 @@ void GPIO_DeInit(GPIO_TypeDef* pGPIO)
 
 	if(pGPIO == GPIOA)
 	{
-			RCC->AHB1RSTR |= (1 << 0);
-			RCC->AHB1RSTR &= ~(1 << 0);
+		RCC->AHB1RSTR |= (1 << 0);
+		RCC->AHB1RSTR &= ~(1 << 0);
 	}
 	else if(pGPIO == GPIOB)
 	{
-			RCC->AHB1RSTR |= (1 << 1);
-			RCC->AHB1RSTR &= ~(1 << 1);
+		RCC->AHB1RSTR |= (1 << 1);
+		RCC->AHB1RSTR &= ~(1 << 1);
 	}
 	else if(pGPIO == GPIOC)
 	{
-			RCC->AHB1RSTR |= (1 << 2);
-			RCC->AHB1RSTR &= ~(1 << 2);
+		RCC->AHB1RSTR |= (1 << 2);
+		RCC->AHB1RSTR &= ~(1 << 2);
 	}
 	else if(pGPIO == GPIOD)
 	{
-			RCC->AHB1RSTR |= (1 << 3);
-			RCC->AHB1RSTR &= ~(1 << 3);
+		RCC->AHB1RSTR |= (1 << 3);
+		RCC->AHB1RSTR &= ~(1 << 3);
 	}
 	else if(pGPIO == GPIOE)
 	{
-			RCC->AHB1RSTR |= (1 << 4);
-			RCC->AHB1RSTR &= ~(1 << 4);
+		RCC->AHB1RSTR |= (1 << 4);
+		RCC->AHB1RSTR &= ~(1 << 4);
 	}
 	else if(pGPIO == GPIOH)
 	{
-			RCC->AHB1RSTR |= (1 << 7);
-			RCC->AHB1RSTR &= ~(1 << 7);
+		RCC->AHB1RSTR |= (1 << 7);
+		RCC->AHB1RSTR &= ~(1 << 7);
 	}
 	else
 	{
-			assert(0); //Error
+		assert(0); //Error
 	}
 
 }
@@ -302,17 +302,16 @@ void GPIO_DeInit(GPIO_TypeDef* pGPIO)
  * @fn               - GPIO_ReadInputPin
  * @brief            - Function to read from a GPIO pin
  * @param[in]        - Base Address of the GPIO peripheral
- * @param[in]        - 8-bit PinNumber on the GPIO port
+ * @param[in]        - PinNumber on the GPIO port
  * @return           - Returns the current level (High or low) of the pin
  * @note             - Corresponding pin must be initialized as input using GPIO_Init()
  */
 
-uint8_t GPIO_ReadInputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber)
+uint8_t GPIO_ReadInputPin(GPIO_TypeDef* pGPIO , GPIO_pinNo_t pinNumber)
 {
 
 	uint8_t val = 0;
 	assert(pGPIO);
-	assert(pinNumber <= GPIO_PIN_NUM15);
 
 	val = (uint8_t)((pGPIO->IDR >> pinNumber ) & 0x00000001);
 
@@ -344,18 +343,17 @@ uint16_t GPIO_ReadInputPort(GPIO_TypeDef* pGPIO)
  * @fn               - GPIO_WriteOutputPin
  * @brief            - Function to write to GPIO pin
  * @param[in]        - Base Address of the GPIO peripheral
- * @param[in]        - 8-bit PinNumber on the GPIO port
- * @param[in]        - GPIO_PIN_SET/GPIO_PIN_UNSET Macros
+ * @param[in]        - PinNumber on the GPIO port
+ * @param[in]        - GPIO_PIN_SET/GPIO_PIN_RESET
  * @return           - None
  * @note             - Corresponding pin must be initialized as output using GPIO_Init()
  */
 
-void GPIO_WriteOutputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber , uint8_t setState)
+void GPIO_WriteOutputPin(GPIO_TypeDef* pGPIO , GPIO_pinNo_t pinNumber , GPIO_pinState_t setState)
 {
 
 	assert(pGPIO);
 	assert(pinNumber <= GPIO_PIN_NUM15);
-	assert((setState == 0 || setState == 1));
 
 	if(setState == GPIO_PIN_SET)
 	{
@@ -392,16 +390,15 @@ void GPIO_WriteOutputPort(GPIO_TypeDef* pGPIO , uint16_t Val )
  * @fn               - GPIO_ToggleOutputPin
  * @brief            - Function to toggle the output of GPIO pin
  * @param[in]        - Base Address of the GPIO peripheral
- * @param[in]        - 8-bit PinNumber on the GPIO port
+ * @param[in]        - PinNumber on the GPIO port
  * @return           - None
  * @note             - Corresponding pin must be initialized as output using GPIO_Init()
  */
 
-void GPIO_ToggleOutputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber)
+void GPIO_ToggleOutputPin(GPIO_TypeDef* pGPIO ,GPIO_pinNo_t  pinNumber)
 {
 
 	assert(pGPIO);
-	assert(pinNumber <= GPIO_PIN_NUM15);
 
 	pGPIO->ODR ^= (1 << pinNumber);
 
@@ -414,43 +411,41 @@ void GPIO_ToggleOutputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber)
 /*
  * @fn               - GPIO_IRQConfig
  * @brief            - Function to configure GPIO interrupts
- * @param[in]        - 8-bit Interrupt Request Number
- * @param[in]        - ENABLE/DISABLE Macros
+ * @param[in]        - Interrupt Request Number
+ * @param[in]        - IRQ_ENABLE/IRQ_DISABLE
  * @return           - None
  * @note             - EXTI module must be configured using GPIO_Init()
  */
 
-void GPIO_IRQConfig(uint8_t IRQNumber , uint8_t setState)
+void GPIO_IRQConfig(GPIO_IRQ_num_t IRQNumber ,GPIO_IRQ_ctrl_t setState)
 {
-	    assert(IRQNumber < 86);
-	    assert((setState == ENABLE || setState == DISABLE));
-		if(setState == ENABLE)
+	if(setState == GPIO_IRQ_ENABLE)
+	{
+		if(IRQNumber <= 31)
 		{
-               if(IRQNumber <= 31)
-               {
-            	   NVIC->ISER[0] |= (1 << IRQNumber);
-               }
-               else if((IRQNumber > 31 && IRQNumber <= 63))
-               {
-            	   NVIC->ISER[1] |= (1 << (IRQNumber & 31));
-               }
-               else
-            	   NVIC->ISER[2] |= (1 << (IRQNumber & 31));
+			NVIC->ISER[0] |= (1 << IRQNumber);
+		}
+		else if((IRQNumber > 31 && IRQNumber <= 63))
+		{
+			NVIC->ISER[1] |= (1 << (IRQNumber & 31));
 		}
 		else
+			NVIC->ISER[2] |= (1 << (IRQNumber & 31));
+	}
+	else
+	{
+		if(IRQNumber <= 31)
 		{
-            if(IRQNumber <= 31)
-            {
-         	   NVIC->ICER[0] |= (1 << IRQNumber);
-            }
-            else if((IRQNumber > 31 && IRQNumber <= 63))
-            {
-         	   NVIC->ICER[1] |= (1 << (IRQNumber & 31));
-            }
-            else
-         	   NVIC->ICER[2] |= (1 << (IRQNumber & 31));
-
+			NVIC->ICER[0] |= (1 << IRQNumber);
 		}
+		else if((IRQNumber > 31 && IRQNumber <= 63))
+		{
+			NVIC->ICER[1] |= (1 << (IRQNumber & 31));
+		}
+		else
+			NVIC->ICER[2] |= (1 << (IRQNumber & 31));
+
+	}
 
 }
 
@@ -458,31 +453,28 @@ void GPIO_IRQConfig(uint8_t IRQNumber , uint8_t setState)
 /*
  * @fn               - GPIO_IRQPriorityConfig
  * @brief            - Function to configure GPIO interrupt Priority
- * @param[in]        - 8-bit Interrupt Request Number
- * @param[in]        - 8-bit Interrupt Priority Number
+ * @param[in]        - Interrupt Request Number
+ * @param[in]        - Interrupt Priority Number
  * @return           - None
  * @note             - Interrupt must be enabled using GPIO_IRQConfig()
  */
 
-void GPIO_IRQPriorityConfig(uint8_t IRQNumber , uint8_t IRQPriority)
+void GPIO_IRQPriorityConfig(GPIO_IRQ_num_t IRQNumber , GPIO_IRQ_priority_t IRQPriority)
 {
-	assert(IRQPriority <= 15);
 	NVIC->IP[IRQNumber] |= (IRQPriority << __NVIC_PRIO_BITS);
-
 }
 
 
 /*
  * @fn               - GPIO_IRQHandler
  * @brief            - Function to process triggered interrupts
- * @param[in]        - 8-bit PinNumber on GPIO port
+ * @param[in]        - PinNumber on GPIO port
  * @return           - None
  * @note             - Interrupt must be enabled using GPIO_IRQConfig()
  */
 
-void GPIO_IRQHandler(uint8_t pinNumber)
+void GPIO_IRQHandler(GPIO_pinNo_t pinNumber)
 {
-	assert(pinNumber <= GPIO_PIN_NUM15);
 
 	/*!< If Interrupt occurred*/
 	if(EXTI->PR & (1 << pinNumber))

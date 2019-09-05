@@ -12,7 +12,7 @@
 #define BTN_PRESSED 1
 #define EX_BTN_PRESSED 0
 
-#define test1 /*!< Test Onboard-led toggle - Pass*/
+//#define test1 /*!< Test Onboard-led toggle - Pass*/
 //#define test2 /*!< Test On board-pushbutton - Pass */
 //#define test3 /*!< Test GPIO read using external pushbutton (Test read fns) - Pass*/
 //#define test4 /*!< Test GPIO write using external led (Test write fns) - Pass */
@@ -50,7 +50,7 @@ void ledInitPP()
     /*!< GPIO pull up and pull down control */
     LED.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_None;
 
-    GPIO_PprlClkCtrl(GPIOD,ENABLE);
+    GPIO_PprlClkCtrl(GPIOD,GPIO_CLK_ENABLE);
 
     GPIO_Init(&LED);
 
@@ -84,7 +84,7 @@ void extLedInit()
     /*!< GPIO pull up and pull down control */
     eLED.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_None;
 
-    GPIO_PprlClkCtrl(GPIOD,ENABLE);
+    GPIO_PprlClkCtrl(GPIOD,GPIO_CLK_ENABLE);
 
     GPIO_Init(&eLED);
 
@@ -110,7 +110,7 @@ void pushBtnInit()
     /*!< GPIO pull up and pull down control */
     PB.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_None; /*!<Already has a resistor to ground*/
 
-    GPIO_PprlClkCtrl(GPIOA,ENABLE);
+    GPIO_PprlClkCtrl(GPIOA,GPIO_CLK_ENABLE);
 
     GPIO_Init(&PB);
 
@@ -137,7 +137,7 @@ void extPushBtnInit()
     /*!< GPIO pull up and pull down control */
     ePB.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_Pu; /*!<Already has a resistor to ground*/
 
-    GPIO_PprlClkCtrl(GPIOE,ENABLE);
+    GPIO_PprlClkCtrl(GPIOE,GPIO_CLK_ENABLE);
 
     GPIO_Init(&ePB);
 
@@ -151,12 +151,12 @@ void ledToggle()
 
 void eledSetHigh()
 {
-	GPIO_WriteOutputPin(GPIOD,GPIO_PIN_NUM7,SET); /*!< Set  PD7 */
+	GPIO_WriteOutputPin(GPIOD,GPIO_PIN_NUM7,GPIO_PIN_SET); /*!< Set  PD7 */
 }
 
 void eledSetLow()
 {
-	GPIO_WriteOutputPin(GPIOD,GPIO_PIN_NUM7,UNSET); /*!< Reset  PD7 */
+	GPIO_WriteOutputPin(GPIOD,GPIO_PIN_NUM7,GPIO_PIN_RESET); /*!< Reset  PD7 */
 }
 
 void EXTI1_IRQHandler(void)
@@ -227,9 +227,9 @@ int main ()
 #ifdef test5
 	extPushBtnInit();
 
-	GPIO_IRQPriorityConfig(IRQ_NUM_EXTI1,IRQ_PRIORITY15);
+	GPIO_IRQPriorityConfig(GPIO_IRQ_NUM_EXTI1,GPIO_IRQ_PRIORITY15);
 
-	GPIO_IRQConfig(IRQ_NUM_EXTI1,ENABLE);
+	GPIO_IRQConfig(GPIO_IRQ_NUM_EXTI1,GPIO_IRQ_ENABLE);
 
 #endif
 

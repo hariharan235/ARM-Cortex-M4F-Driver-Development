@@ -37,28 +37,18 @@
 #define INCLUDE_STM32F4XX_GPIO_STM32F411_H_
 
 
- /*!@brief
-  *
-  * Device Specific header file
-  */
+/*!@brief
+ *
+ * Device Specific header file
+ */
 
 #include "stm32f411xe.h"
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif /* __cplusplus */
 
- /*!@brief
-  *
-  * Generic Macros
-  */
 
- #define ENABLE 1
- #define DISABLE 0
- #define SET ENABLE
- #define UNSET DISABLE
- #define GPIO_PIN_SET SET
- #define GPIO_PIN_RESET UNSET
 
 
 /******************************************************************************/
@@ -67,6 +57,18 @@
 /*                                                                            */
 /******************************************************************************/
 
+/*!@brief
+ *
+ * @GPIO_CLK_CNTRL
+ * GPIO clock enable or disable
+ */
+
+typedef enum
+{
+	GPIO_CLK_DISABLE,
+	GPIO_CLK_ENABLE
+
+}GPIO_clk_ctrl_t;
 
 
 /*!@brief
@@ -74,14 +76,17 @@
  * @GPIO_PIN_MODES
  * Possible GPIO modes
  */
+typedef enum
+{
+	GPIO_MODE_IN,     /*!<Input Mode*/
+	GPIO_MODE_OUT,    /*!<Output Mode*/
+	GPIO_MODE_ALTFN,  /*!<Alternate Function Mode*/
+	GPIO_MODE_ANALOG, /*!<Analog*/
+	GPIO_MODE_IN_FE,  /*!<Interrupt Falling Edge*/
+	GPIO_MODE_IN_RE,  /*!<Interrupt Rising Edge*/
+	GPIO_MODE_IN_FRE  /*!<Interrupt Rising and Falling Edge Triggers*/
 
-#define GPIO_MODE_IN 0  /*!<Input Mode*/
-#define GPIO_MODE_OUT 1 /*!<Output Mode*/
-#define GPIO_MODE_ALTFN 2 /*!<Alternate Function Mode*/
-#define GPIO_MODE_ANALOG 3 /*!<Analog*/
-#define GPIO_MODE_IN_FE 4 /*!<Interrupt Falling Edge*/
-#define GPIO_MODE_IN_RE 5 /*!<Interrupt Rising Edge*/
-#define GPIO_MODE_IN_FRE 6 /*!<Interrupt Rising and Falling Edge Triggers*/
+}GPIO_mode_t;
 
 
 /*!@brief
@@ -90,8 +95,12 @@
  * GPIO Pin Output Types
  */
 
-#define GPIO_OPTYPE_PuPl 0/*!<Push Push Output Type*/
-#define GPIO_OPTYPE_OPD  1/*!<Open Drain Output Type*/
+typedef enum
+{
+	GPIO_OPTYPE_PuPl,/*!<Push Push Output Type*/
+	GPIO_OPTYPE_OPD  /*!<Open Drain Output Type*/
+
+}GPIO_pin_type_t;
 
 
 /*!@brief
@@ -100,10 +109,14 @@
  * GPIO Pin Output Speed
  */
 
-#define GPIO_OSPEED_Low 0 /*!<Low Output Speed*/
-#define GPIO_OSPEED_Med 1 /*!<Medium Output Speed*/
-#define GPIO_OSPEED_Fast 2 /*!<Fast Output Speed*/
-#define GPIO_OSPEED_High 3 /*!<High Output Speed*/
+typedef enum
+{
+	GPIO_OSPEED_Low,  /*!<Low Output Speed*/
+	GPIO_OSPEED_Med,  /*!<Medium Output Speed*/
+	GPIO_OSPEED_Fast, /*!<Fast Output Speed*/
+	GPIO_OSPEED_High  /*!<High Output Speed*/
+
+}GPIO_pin_speed_t;
 
 
 /*!@brief
@@ -112,10 +125,13 @@
  * GPIO Pin Pull-up and Pull-down control
  */
 
-#define GPIO_PuPd_None 0 /*No internal pull-up or pull-down register*/
-#define GPIO_PuPd_Pu 1  /*Internal pull-up(40k with exceptions for some pins (refer data-sheet))*/
-#define GPIO_PuPd_Pd 2  /*Internal pull-down(40k with exceptions for some pins (refer data-sheet))*/
+typedef enum
+{
+	GPIO_PuPd_None, /*No internal pull-up or pull-down register*/
+	GPIO_PuPd_Pu,  /*Internal pull-up(40k with exceptions for some pins (refer data-sheet))*/
+	GPIO_PuPd_Pd   /*Internal pull-down(40k with exceptions for some pins (refer data-sheet))*/
 
+}GPIO_pupd_ctrl_t;
 
 /*!@brief
  *
@@ -123,23 +139,39 @@
  * GPIO PinNumbers
  */
 
-#define GPIO_PIN_NUM0 0         /*!< Pin Number 0 */
-#define GPIO_PIN_NUM1 1         /*!< Pin Number 1 */
-#define GPIO_PIN_NUM2 2         /*!< Pin Number 2 */
-#define GPIO_PIN_NUM3 3         /*!< Pin Number 3 */
-#define GPIO_PIN_NUM4 4         /*!< Pin Number 4 */
-#define GPIO_PIN_NUM5 5         /*!< Pin Number 5 */
-#define GPIO_PIN_NUM6 6         /*!< Pin Number 6 */
-#define GPIO_PIN_NUM7 7         /*!< Pin Number 7 */
-#define GPIO_PIN_NUM8 8         /*!< Pin Number 8 */
-#define GPIO_PIN_NUM9 9         /*!< Pin Number 9 */
-#define GPIO_PIN_NUM10 10       /*!< Pin Number 10 */
-#define GPIO_PIN_NUM11 11       /*!< Pin Number 11 */
-#define GPIO_PIN_NUM12 12       /*!< Pin Number 12 */
-#define GPIO_PIN_NUM13 13       /*!< Pin Number 13 */
-#define GPIO_PIN_NUM14 14       /*!< Pin Number 14 */
-#define GPIO_PIN_NUM15 15       /*!< Pin Number 15 */
+typedef enum
+{
+	GPIO_PIN_NUM0,        /*!< Pin Number 0 */
+	GPIO_PIN_NUM1,        /*!< Pin Number 1 */
+	GPIO_PIN_NUM2,         /*!< Pin Number 2 */
+	GPIO_PIN_NUM3,         /*!< Pin Number 3 */
+	GPIO_PIN_NUM4,         /*!< Pin Number 4 */
+	GPIO_PIN_NUM5,         /*!< Pin Number 5 */
+	GPIO_PIN_NUM6,         /*!< Pin Number 6 */
+	GPIO_PIN_NUM7,         /*!< Pin Number 7 */
+	GPIO_PIN_NUM8,         /*!< Pin Number 8 */
+	GPIO_PIN_NUM9,         /*!< Pin Number 9 */
+	GPIO_PIN_NUM10,       /*!< Pin Number 10 */
+	GPIO_PIN_NUM11,       /*!< Pin Number 11 */
+	GPIO_PIN_NUM12,       /*!< Pin Number 12 */
+	GPIO_PIN_NUM13,       /*!< Pin Number 13 */
+	GPIO_PIN_NUM14,       /*!< Pin Number 14 */
+	GPIO_PIN_NUM15       /*!< Pin Number 15 */
 
+}GPIO_pinNo_t;
+
+/*!@brief
+ *
+ * @GPIO_PINSTATE
+ * GPIO Pin States
+ */
+
+typedef enum
+{
+	GPIO_PIN_RESET,
+	GPIO_PIN_SET
+
+}GPIO_pinState_t;
 
 /*!@brief
  *
@@ -147,22 +179,26 @@
  * GPIO Alternate Functions
  */
 
-//#define GPIO_PIN_AFR0 0
-//#define GPIO_PIN_AFR1 1
-//#define GPIO_PIN_AFR2 2
-//#define GPIO_PIN_AFR3 3
-//#define GPIO_PIN_AFR4 4
-//#define GPIO_PIN_AFR5 5
-//#define GPIO_PIN_AFR6 6
-//#define GPIO_PIN_AFR7 7
-//#define GPIO_PIN_AFR8 8
-//#define GPIO_PIN_AFR9 9
-//#define GPIO_PIN_AFR10 10
-//#define GPIO_PIN_AFR11 11
-//#define GPIO_PIN_AFR12 12
-//#define GPIO_PIN_AFR13 13
-//#define GPIO_PIN_AFR14 14
-//#define GPIO_PIN_AFR15 15
+typedef enum
+{
+	GPIO_PIN_AFR0,
+	GPIO_PIN_AFR1,
+	GPIO_PIN_AFR2,
+	GPIO_PIN_AFR3,
+	GPIO_PIN_AFR4,
+	GPIO_PIN_AFR5,
+	GPIO_PIN_AFR6,
+	GPIO_PIN_AFR7,
+	GPIO_PIN_AFR8,
+	GPIO_PIN_AFR9,
+	GPIO_PIN_AFR10,
+	GPIO_PIN_AFR11,
+	GPIO_PIN_AFR12,
+	GPIO_PIN_AFR13,
+	GPIO_PIN_AFR14,
+	GPIO_PIN_AFR15
+
+}GPIO_altfn_t;
 
 
 /*!@brief
@@ -171,27 +207,44 @@
  */
 
 #define GPIO_PORT_CODE(x)  ((x == GPIOA) ? 0 :\
-		                    (x == GPIOB) ? 1 :\
-		                    (x == GPIOC) ? 2 :\
-		                    (x == GPIOD) ? 3 :\
-		                    (x == GPIOE) ? 4 :\
-		                    (x == GPIOH) ? 7 :0)
+		(x == GPIOB) ? 1 :\
+				(x == GPIOC) ? 2 :\
+						(x == GPIOD) ? 3 :\
+								(x == GPIOE) ? 4 :\
+										(x == GPIOH) ? 7 :0)
 
 
 /*!@brief
  *
  *
- * IRQ_Numbers
+ * GPIO_IRQ_Numbers
  */
 
-#define IRQ_NUM_EXTI0 6
-#define IRQ_NUM_EXTI1 7
-#define IRQ_NUM_EXTI2 8
-#define IRQ_NUM_EXTI3 9
-#define IRQ_NUM_EXTI4 10
-#define IRQ_NUM_EXTI9_5 23
-#define IRQ_NUM_EXTI15_10 40
-#define IRQ_NUM_EXTI17 41
+typedef enum
+{
+	GPIO_IRQ_NUM_EXTI0 = 6,
+	GPIO_IRQ_NUM_EXTI1,
+	GPIO_IRQ_NUM_EXTI2,
+	GPIO_IRQ_NUM_EXTI3,
+	GPIO_IRQ_NUM_EXTI4,
+	GPIO_IRQ_NUM_EXTI9_5 = 23,
+	GPIO_IRQ_NUM_EXTI15_10 = 40,
+	GPIO_IRQ_NUM_EXTI17
+
+}GPIO_IRQ_num_t;
+
+/*!@brief
+ *
+ *
+ * IRQ_Enable / IRQ_Disable
+ */
+
+typedef enum
+{
+	GPIO_IRQ_DISABLE,
+	GPIO_IRQ_ENABLE
+
+}GPIO_IRQ_ctrl_t;
 
 /*!@brief
  *
@@ -199,23 +252,26 @@
  * IRQ_Priority Values
  */
 
-#define IRQ_PRIORITY0  0
-#define IRQ_PRIORITY1  1
-#define IRQ_PRIORITY2  2
-#define IRQ_PRIORITY3  3
-#define IRQ_PRIORITY4  4
-#define IRQ_PRIORITY5  5
-#define IRQ_PRIORITY6  6
-#define IRQ_PRIORITY7  7
-#define IRQ_PRIORITY8  8
-#define IRQ_PRIORITY9  9
-#define IRQ_PRIORITY10 10
-#define IRQ_PRIORITY11 11
-#define IRQ_PRIORITY12 12
-#define IRQ_PRIORITY13 13
-#define IRQ_PRIORITY14 14
-#define IRQ_PRIORITY15 15
+typedef enum
+{
+	GPIO_IRQ_PRIORITY0,
+	GPIO_IRQ_PRIORITY1,
+	GPIO_IRQ_PRIORITY2,
+	GPIO_IRQ_PRIORITY3,
+	GPIO_IRQ_PRIORITY4,
+	GPIO_IRQ_PRIORITY5,
+	GPIO_IRQ_PRIORITY6,
+	GPIO_IRQ_PRIORITY7,
+	GPIO_IRQ_PRIORITY8,
+	GPIO_IRQ_PRIORITY9,
+	GPIO_IRQ_PRIORITY10,
+	GPIO_IRQ_PRIORITY11,
+	GPIO_IRQ_PRIORITY12,
+	GPIO_IRQ_PRIORITY13,
+	GPIO_IRQ_PRIORITY14,
+	GPIO_IRQ_PRIORITY15
 
+}GPIO_IRQ_priority_t;
 
 
 /******************************************************************************/
@@ -224,6 +280,22 @@
 /*                                                                            */
 /******************************************************************************/
 
+/**
+  * @brief General Purpose I/O
+  */
+
+typedef struct
+{
+  __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
+  __IO uint32_t OTYPER;   /*!< GPIO port output type register,        Address offset: 0x04      */
+  __IO uint32_t OSPEEDR;  /*!< GPIO port output speed register,       Address offset: 0x08      */
+  __IO uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register,  Address offset: 0x0C      */
+  __IO uint32_t IDR;      /*!< GPIO port input data register,         Address offset: 0x10      */
+  __IO uint32_t ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
+  __IO uint32_t BSRR;     /*!< GPIO port bit set/reset register,      Address offset: 0x18      */
+  __IO uint32_t LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
+  __IO uint32_t AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x20-0x24 */
+} GPIO_TypeDef;
 
 
 /*!@brief
@@ -254,7 +326,7 @@ typedef struct
 typedef struct
 {
 	GPIO_TypeDef* pGPIO;                                    /*!<Holds the Base Address of the GPIO Port*/
-    GPIO_PinConfig_t GPIO_PinConfig;                                   /*!<Handle to the pin configuration settings*/
+	GPIO_PinConfig_t GPIO_PinConfig;                                   /*!<Handle to the pin configuration settings*/
 
 }GPIO_handle_t;
 
@@ -277,7 +349,7 @@ typedef struct
 
 /*!< Peripheral clock setup*/
 
-void GPIO_PprlClkCtrl(GPIO_TypeDef* pGPIO , uint8_t setState);                                     /*!<Function to control peripheral clock*/
+void GPIO_PprlClkCtrl(GPIO_TypeDef* pGPIO , GPIO_clk_ctrl_t setState);                                    /*!<Function to control peripheral clock*/
 
 
 /*!< GPIO initialization Functions*/
@@ -287,18 +359,18 @@ void GPIO_DeInit(GPIO_TypeDef* pGPIO);                                          
 
 /*!< GPIO read and write Functions*/
 
-uint8_t GPIO_ReadInputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber);                                /*!<Function to read from a GPIO pin*/
+uint8_t GPIO_ReadInputPin(GPIO_TypeDef* pGPIO , GPIO_pinNo_t pinNumber);                               /*!<Function to read from a GPIO pin*/
 uint16_t GPIO_ReadInputPort(GPIO_TypeDef* pGPIO);                                                  /*!<Function to read from Input Port*/
-void GPIO_WriteOutputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber , uint8_t setState);              /*!<Function to write to a GPIO pin*/
+void GPIO_WriteOutputPin(GPIO_TypeDef* pGPIO , GPIO_pinNo_t pinNumber , GPIO_pinState_t setState);              /*!<Function to write to a GPIO pin*/
 void GPIO_WriteOutputPort(GPIO_TypeDef* pGPIO , uint16_t Val );                                    /*!<Function to write to GPIO port*/
-void GPIO_ToggleOutputPin(GPIO_TypeDef* pGPIO , uint8_t pinNumber);                                /*!<Function to toggle GPIO output Pin*/
+void GPIO_ToggleOutputPin(GPIO_TypeDef* pGPIO ,GPIO_pinNo_t  pinNumber);                              /*!<Function to toggle GPIO output Pin*/
 
 
 /*!< GPIO Interrupt Control Function*/
 
-void GPIO_IRQConfig(uint8_t IRQNumber , uint8_t setState);                                         /*!<Function to configure GPIO Interrupts*/
-void GPIO_IRQPriorityConfig(uint8_t IRQNumber , uint8_t IRQPriority);                              /*!<Function to configure Interrupt priority */
-void GPIO_IRQHandler(uint8_t pinNumber);                                                           /*!<Function to process triggered interrupts*/
+void GPIO_IRQConfig(GPIO_IRQ_num_t IRQNumber ,GPIO_IRQ_ctrl_t setState);                                        /*!<Function to configure GPIO Interrupts*/
+void GPIO_IRQPriorityConfig(GPIO_IRQ_num_t IRQNumber , GPIO_IRQ_priority_t IRQPriority);                             /*!<Function to configure Interrupt priority */
+void GPIO_IRQHandler(GPIO_pinNo_t pinNumber);                                                          /*!<Function to process triggered interrupts*/
 
 #ifdef __cplusplus
 }
