@@ -5,8 +5,8 @@
  * @brief   STM32F411VE Device Peripheral Access Layer Header File.
  *
  *  This file contains:
- *              - Macros for GPIO pin Configurations
- *              - Macros for enabling & disabling Clock at GPIO Ports
+ *              - Enumerations for GPIO pin Configurations
+ *              - Enumerations for enabling & disabling Clock at GPIO Ports
  *              - Data Structures for GPIO Pin Configurations
  *              - API Function Prototypes
  *              - API Interrupt Prototypes
