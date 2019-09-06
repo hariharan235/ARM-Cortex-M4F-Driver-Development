@@ -5,5 +5,177 @@
  *      Author: root
  */
 
-
+#include <assert.h>
 #include "spi_stm32f411.h"
+
+
+/*!< Peripheral clock setup*/
+
+/*
+ * @fn               - SPI_PprlClkCtrl
+ * @brief            - Function to enable/disable peripheral clock for the SPI peripheral
+ * @param[in]        - Base Address of the SPI peripheral
+ * @param[in]        - SPI_CLK_ENABLE / SPI_CLK_DISABLE
+ * @return           - None
+ * @note             - None
+ */
+
+void SPI_PprlClkCtrl(SPI_TypeDef* pSPI , SPI_PerifClk_t setState)
+{
+	assert(pSPI);
+
+	if(setState == SPI_CLK_ENABLE)
+	{
+		if(pSPI == SPI1)
+		{
+			RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SPI1EN_Pos);
+			RCC->APB2ENR |= (1 << RCC_APB2ENR_SPI1EN_Pos);
+		}
+		else if(pSPI == SPI2)
+		{
+			RCC->APB1ENR &= ~(1 << RCC_APB1ENR_SPI2EN_Pos);
+			RCC->APB1ENR |= (1 << RCC_APB1ENR_SPI2EN_Pos);
+		}
+		else if(pSPI == SPI3)
+		{
+			RCC->APB1ENR &= ~(1 << RCC_APB1ENR_SPI3EN_Pos);
+			RCC->APB1ENR |= (1 << RCC_APB1ENR_SPI3EN_Pos);
+		}
+		else if(pSPI == SPI4)
+		{
+			RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SPI4EN_Pos);
+			RCC->APB2ENR |= (1 << RCC_APB2ENR_SPI4EN_Pos);
+		}
+		else if(pSPI == SPI5)
+		{
+			RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SPI5EN_Pos);
+			RCC->APB2ENR |= (1 << RCC_APB2ENR_SPI5EN_Pos);
+		}
+		else
+			assert(0);
+	}
+	else
+	{
+		if(pSPI == SPI1)
+		{
+			RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SPI1EN_Pos);
+		}
+		else if(pSPI == SPI2)
+		{
+			RCC->APB1ENR &= ~(1 << RCC_APB1ENR_SPI2EN_Pos);
+		}
+		else if(pSPI == SPI3)
+		{
+			RCC->APB1ENR &= ~(1 << RCC_APB1ENR_SPI3EN_Pos);
+		}
+		else if(pSPI == SPI4)
+		{
+			RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SPI4EN_Pos);
+		}
+		else if(pSPI == SPI5)
+		{
+			RCC->APB2ENR &= ~(1 << RCC_APB2ENR_SPI5EN_Pos);
+		}
+		else
+			assert(0);
+	}
+}
+
+/*!< GPIO initialization Functions*/
+
+/*
+ * @fn               - SPI_Init
+ * @brief            - Function to initialize SPI peripheral
+ * @param[in]        - Pointer to the SPI configuration structure
+ * @return           - None
+ * @note             - Corresponding peripheral clock must be enabled using SPI_PprlClkCtrl()
+ */
+
+void SPI_Init(SPI_handle_t *pSPIHandle)
+{
+	assert(pSPIHandle);
+
+	/*!< Configure Device mode >*/
+
+	if(pSPIHandle->SPIConfig.DEVICEMODE == SPI_MODE_MASTER)
+	{
+		pSPIHandle->pSPIx->CR1 |= (1 << SPI_CR1_MSTR_Pos);
+	}
+	else
+	{
+		pSPIHandle->pSPIx->CR1 &= ~(1 << SPI_CR1_MSTR_Pos);
+	}
+
+	/*!< Configure SPI bus >*/
+
+	switch(pSPIHandle->SPIConfig.BUSCONFIG)
+	{
+	case SPI_BUS_CONF_FD:
+
+		pSPIHandle->pSPIx->CR1 &= ~(1 << SPI_CR1_BIDIMODE_Pos); /*!< 2-Wire Unidirectional Mode >*/
+		pSPIHandle->pSPIx->CR1 &= ~(1 << SPI_CR1_RXONLY_Pos);   /*!< Full-Duplex >*/
+		break;
+
+	case SPI_BUS_CONF_HD_RX:
+
+		pSPIHandle->pSPIx->CR1 |= (1 << SPI_CR1_BIDIMODE_Pos);  /*!< 1-Wire Bidirectional Mode >*/
+		pSPIHandle->pSPIx->CR1 &= ~(1 << SPI_CR1_BIDIOE_Pos);   /*< Receive Only >*/
+		break;
+
+	case SPI_BUS_CONF_HD_TX:
+
+		pSPIHandle->pSPIx->CR1 |= (1 << SPI_CR1_BIDIMODE_Pos);  /*!< 1-Wire Bidirectional Mode >*/
+		pSPIHandle->pSPIx->CR1 |= (1 << SPI_CR1_BIDIOE_Pos);    /*< Transmit Only >*/
+		break;
+
+	case SPI_BUS_CONF_SM_RX:
+
+		pSPIHandle->pSPIx->CR1 &= ~(1 << SPI_CR1_BIDIMODE_Pos); /*!< Unidirectional Mode >*/
+		pSPIHandle->pSPIx->CR1 |=  (1 << SPI_CR1_RXONLY_Pos);   /*!< Receive Only >*/
+		break;
+
+	default:
+
+		assert(0);
+		break;
+	}
+
+	/*!< Configure SPI Baud Rate >*/
+
+	pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SCLKSPEED << SPI_CR1_BR_Pos);
+
+	/*!< Configure SPI Data Frame Format >*/
+
+	pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.DFF << SPI_CR1_DFF_Pos);
+
+	/*!< Configure SPI CPOL >*/
+
+	pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.CPOL << SPI_CR1_CPOL_Pos);
+
+	/*!< Configure SPI CPHA >*/
+
+	pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.CPHA << SPI_CR1_CPHA_Pos);
+
+	/*!< Configure SPI SSM >*/
+
+	pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SSM << SPI_CR1_SSM_Pos);
+
+	/*!< Enable SPI >*/
+
+	pSPIHandle->pSPIx->CR1 |= (1 << SPI_CR1_SPE_Pos);
+
+}
+
+/*
+ * @fn               - SPI_DeInit
+ * @brief            - Function to disable SPI peripheral
+ * @param[in]        - Base Address of the SPI peripheral
+ * @return           - None
+ * @note             - None
+ */
+
+void SPI_DeInit(SPI_TypeDef* pSPI)
+{
+	assert(pSPI);
+
+}
