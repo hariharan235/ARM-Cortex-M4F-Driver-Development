@@ -65,33 +65,33 @@ void GPIO_PprlClkCtrl(GPIO_TypeDef* pGPIO , GPIO_clk_ctrl_t setState)
 
 		if(pGPIO == GPIOA)
 		{
-			RCC->AHB1ENR &= ~(1 << 0);
-			RCC->AHB1ENR |= (1 << 0);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOAEN_Pos);
+			RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOAEN_Pos);
 		}
 		else if(pGPIO == GPIOB)
 		{
-			RCC->AHB1ENR &= ~(1 << 1);
-			RCC->AHB1ENR |= (1 << 1);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOBEN_Pos);
+			RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOBEN_Pos);
 		}
 		else if(pGPIO == GPIOC)
 		{
-			RCC->AHB1ENR &= ~(1 << 2);
-			RCC->AHB1ENR |= (1 << 2);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOCEN_Pos);
+			RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOCEN_Pos);
 		}
 		else if(pGPIO == GPIOD)
 		{
-			RCC->AHB1ENR &= ~(1 << 3);
-			RCC->AHB1ENR |= (1 << 3);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIODEN_Pos);
+			RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIODEN_Pos);
 		}
 		else if(pGPIO == GPIOE)
 		{
-			RCC->AHB1ENR &= ~(1 << 4);
-			RCC->AHB1ENR |= (1 << 4);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOEEN_Pos);
+			RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOEEN_Pos);
 		}
 		else if(pGPIO == GPIOH)
 		{
-			RCC->AHB1ENR &= ~(1 << 7);
-			RCC->AHB1ENR |= (1 << 7);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOHEN_Pos);
+			RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOHEN_Pos);
 		}
 		else
 			assert(0); //Error
@@ -100,32 +100,35 @@ void GPIO_PprlClkCtrl(GPIO_TypeDef* pGPIO , GPIO_clk_ctrl_t setState)
 	{
 		if(pGPIO == GPIOA)
 		{
-			RCC->AHB1ENR &= ~(1 << 0);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOAEN_Pos);
+
 		}
 		else if(pGPIO == GPIOB)
 		{
-			RCC->AHB1ENR &= ~(1 << 1);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOBEN_Pos);
+
 		}
 		else if(pGPIO == GPIOC)
 		{
-			RCC->AHB1ENR &= ~(1 << 2);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOCEN_Pos);
+
 		}
 		else if(pGPIO == GPIOD)
 		{
-			RCC->AHB1ENR &= ~(1 << 3);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIODEN_Pos);
+
 		}
 		else if(pGPIO == GPIOE)
 		{
-			RCC->AHB1ENR &= ~(1 << 4);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOEEN_Pos);
+
 		}
 		else if(pGPIO == GPIOH)
 		{
-			RCC->AHB1ENR &= ~(1 << 7);
+			RCC->AHB1ENR &= ~(1 << RCC_AHB1ENR_GPIOHEN_Pos);
 		}
 		else
-		{
 			assert(0); //Error
-		}
 	}
 
 }
@@ -260,33 +263,33 @@ void GPIO_DeInit(GPIO_TypeDef* pGPIO)
 
 	if(pGPIO == GPIOA)
 	{
-		RCC->AHB1RSTR |= (1 << 0);
-		RCC->AHB1RSTR &= ~(1 << 0);
+		RCC->AHB1RSTR |= (1 << RCC_AHB1RSTR_GPIOARST_Pos);
+		RCC->AHB1RSTR &= ~(1 << RCC_AHB1RSTR_GPIOARST_Pos);
 	}
 	else if(pGPIO == GPIOB)
 	{
-		RCC->AHB1RSTR |= (1 << 1);
-		RCC->AHB1RSTR &= ~(1 << 1);
+		RCC->AHB1RSTR |= (1 << RCC_AHB1RSTR_GPIOBRST_Pos);
+		RCC->AHB1RSTR &= ~(1 << RCC_AHB1RSTR_GPIOBRST_Pos);
 	}
 	else if(pGPIO == GPIOC)
 	{
-		RCC->AHB1RSTR |= (1 << 2);
-		RCC->AHB1RSTR &= ~(1 << 2);
+		RCC->AHB1RSTR |= (1 << RCC_AHB1RSTR_GPIOCRST_Pos);
+		RCC->AHB1RSTR &= ~(1 << RCC_AHB1RSTR_GPIOCRST_Pos);
 	}
 	else if(pGPIO == GPIOD)
 	{
-		RCC->AHB1RSTR |= (1 << 3);
-		RCC->AHB1RSTR &= ~(1 << 3);
+		RCC->AHB1RSTR |= (1 << RCC_AHB1RSTR_GPIODRST_Pos);
+		RCC->AHB1RSTR &= ~(1 << RCC_AHB1RSTR_GPIODRST_Pos);
 	}
 	else if(pGPIO == GPIOE)
 	{
-		RCC->AHB1RSTR |= (1 << 4);
-		RCC->AHB1RSTR &= ~(1 << 4);
+		RCC->AHB1RSTR |= (1 << RCC_AHB1RSTR_GPIODRST_Pos);
+		RCC->AHB1RSTR &= ~(1 << RCC_AHB1RSTR_GPIODRST_Pos);
 	}
 	else if(pGPIO == GPIOH)
 	{
-		RCC->AHB1RSTR |= (1 << 7);
-		RCC->AHB1RSTR &= ~(1 << 7);
+		RCC->AHB1RSTR |= (1 << RCC_AHB1RSTR_GPIOHRST_Pos);
+		RCC->AHB1RSTR &= ~(1 << RCC_AHB1RSTR_GPIOHRST_Pos);
 	}
 	else
 	{
@@ -353,7 +356,6 @@ void GPIO_WriteOutputPin(GPIO_TypeDef* pGPIO , GPIO_pinNo_t pinNumber , GPIO_pin
 {
 
 	assert(pGPIO);
-	assert(pinNumber <= GPIO_PIN_NUM15);
 
 	if(setState == GPIO_PIN_SET)
 	{

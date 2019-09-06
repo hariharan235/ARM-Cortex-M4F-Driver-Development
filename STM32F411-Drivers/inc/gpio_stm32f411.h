@@ -37,6 +37,11 @@
 #define INCLUDE_STM32F4XX_GPIO_STM32F411_H_
 
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
 /*!@brief
  *
  * Device Specific header file
@@ -44,16 +49,11 @@
 
 #include "stm32f411xe.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-
 
 
 /******************************************************************************/
 /*                                                                            */
-/*                  Macros for GPIO Pin Configuration                         */
+/*                  Enumerations for GPIO Pin Configuration                   */
 /*                                                                            */
 /******************************************************************************/
 
@@ -280,23 +280,6 @@ typedef enum
 /*                                                                            */
 /******************************************************************************/
 
-/**
-  * @brief General Purpose I/O
-  */
-
-typedef struct
-{
-  __IO uint32_t MODER;    /*!< GPIO port mode register,               Address offset: 0x00      */
-  __IO uint32_t OTYPER;   /*!< GPIO port output type register,        Address offset: 0x04      */
-  __IO uint32_t OSPEEDR;  /*!< GPIO port output speed register,       Address offset: 0x08      */
-  __IO uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register,  Address offset: 0x0C      */
-  __IO uint32_t IDR;      /*!< GPIO port input data register,         Address offset: 0x10      */
-  __IO uint32_t ODR;      /*!< GPIO port output data register,        Address offset: 0x14      */
-  __IO uint32_t BSRR;     /*!< GPIO port bit set/reset register,      Address offset: 0x18      */
-  __IO uint32_t LCKR;     /*!< GPIO port configuration lock register, Address offset: 0x1C      */
-  __IO uint32_t AFR[2];   /*!< GPIO alternate function registers,     Address offset: 0x20-0x24 */
-} GPIO_TypeDef;
-
 
 /*!@brief
  *
@@ -307,12 +290,12 @@ typedef struct
 
 typedef struct
 {
-	uint8_t PINNUMBER;                     /*!<GPIO pin number*/ /*!<Possible Values from @GPIO_PINNUMBER*/
-	uint8_t PINMODE;                       /*!<GPIO pin mode*/    /*!<Possible Values from @GPIO_PIN_MODES*/
-	uint8_t PINSPEED;                      /*!<GPIO pin speed*/   /*!<Possible Values from @GPIO_PIN_OSPEED*/
-	uint8_t PINPULLPDCONTROL;              /*!<GPIO pin pull-up and pull-down control*/ /*!<Possible Values from @GPIO_PUPD_CTRL*/
-	uint8_t PINOPTYPE;                     /*!<GPIO output type*/ /*!<Possible Values from @GPIO_PIN_OTYPE*/
-	uint8_t PINALTFNMODE;                  /*!<GPIO Alternate Function mode*/
+	GPIO_pinNo_t PINNUMBER;                     /*!<GPIO pin number*/ /*!<Possible Values from @GPIO_PINNUMBER*/
+	GPIO_mode_t PINMODE;                       /*!<GPIO pin mode*/    /*!<Possible Values from @GPIO_PIN_MODES*/
+	GPIO_pin_speed_t PINSPEED;                      /*!<GPIO pin speed*/   /*!<Possible Values from @GPIO_PIN_OSPEED*/
+	GPIO_pupd_ctrl_t PINPULLPDCONTROL;              /*!<GPIO pin pull-up and pull-down control*/ /*!<Possible Values from @GPIO_PUPD_CTRL*/
+	GPIO_pin_type_t PINOPTYPE;                     /*!<GPIO output type*/ /*!<Possible Values from @GPIO_PIN_OTYPE*/
+	GPIO_altfn_t PINALTFNMODE;                  /*!<GPIO Alternate Function mode*/
 
 }GPIO_PinConfig_t;
 
