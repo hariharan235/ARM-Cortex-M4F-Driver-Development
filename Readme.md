@@ -16,7 +16,7 @@ Peripheral Drivers and Board Support Packacges for Texas Instruments tm4c123gh6p
 ## Features
 
 
-## Porting and Instalation
+## Porting and Installation
 
 
 ### Linux
