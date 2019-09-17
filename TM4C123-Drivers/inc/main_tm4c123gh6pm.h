@@ -589,6 +589,28 @@ typedef struct
 } GPIO_PORT_T;
 
 
+/*
+ * @brief Serial Peripheral Interface Registers
+ *
+ */
+
+typedef struct
+{
+    __IO uint32_t CR0;    /*!< SSI Control 0                                        Address offset: 0x000 */
+    __IO uint32_t CR1;    /*!< SSI Control 1                                     Address offset: 0x004 */
+    __IO uint32_t DR;    /*!< SSI Data Register                                  Address offset: 0x008 */
+    __I uint32_t SR;    /*!< SSI Status Register                                Address offset: 0x00C */
+    __IO uint32_t CPSR;   /*!< SSI Clock Pre-scale                                              Address offset: 0x0010 */
+    __IO uint32_t IM;    /*!< SSI Interrupt Mask                                 Address offset: 0x0014 */
+    __I uint32_t RIS;   /*!< SSI Raw Interrupt Status                           Address offset: 0x0018 */
+    __I uint32_t MIS;   /*!< SSI Masked Interrupt Status                         Address offset: 0x001C */
+    __O uint32_t ICR;   /*!< SSI Interrupt Clear,                             Address offset: 0x0020 */
+    __IO uint32_t DMACTL; /*!< SSI DMA Control,                                Address offset: 0x0024 */
+    __I  uint32_t RESERVED[1000];  /*!< RESERVED,                                Address offset: 0x0028 */
+    __IO uint32_t CC;     /*!< SSI Clock Configuration                         Address offset: 0x0FC8 */
+
+
+}ssi_periph_t;
 
 /***************************************************************************/
 /*                                                                         */
@@ -614,8 +636,14 @@ typedef struct
 #define GPIOE_AHB                ((GPIO_PORT_T *) GPIOE_AHB_BASEADDR)
 #define GPIOF_AHB                ((GPIO_PORT_T *) GPIOF_AHB_BASEADDR)
 
+#define SSI0                     ((ssi_periph_t *) SSI0_BASEADDR)
+#define SSI1                     ((ssi_periph_t *) SSI1_BASEADDR)
+#define SSI2                     ((ssi_periph_t *) SSI2_BASEADDR)
+#define SSI3                     ((ssi_periph_t *) SSI3_BASEADDR)
+
 #define SYSCTL                   ((SYSCTL_T        *)SYSCTL_BASEADDR)
 #define SYSCTL_LEGACY            ((SYSCTL_LEGACY_T *)SYSCTL_BASEADDR)
+
 
 #define NVIC                     ((NVIC_T          *)NVIC_BASEADDR)
 

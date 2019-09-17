@@ -32,8 +32,8 @@
 /*
  * @brief Standard Header and driver specific header files
  */
-#include "gpio_tm4c123gh6pm.h"
-#include "gpio.h"
+#include "TM4C123-Drivers/inc/gpio_tm4c123gh6pm.h"
+#include "API/inc/gpio.h"
 #include <stdarg.h>
 #include <string.h>
 
