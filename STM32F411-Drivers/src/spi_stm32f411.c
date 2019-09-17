@@ -118,6 +118,12 @@ void SPI_Init(SPI_handle_t *pSPIHandle)
 {
 	assert(pSPIHandle);
 
+	assert(pSPIHandle->pSPIx);
+
+	/*!< Enable Peripheral clock >*/
+
+	SPI_PprlClkCtrl(pSPIHandle->pSPIx ,SPI_CLK_ENABLE);
+
 	/*!< Configure Device mode >*/
 
 	if(pSPIHandle->SPIConfig.DEVICEMODE == SPI_MODE_MASTER)
@@ -183,22 +189,151 @@ void SPI_Init(SPI_handle_t *pSPIHandle)
 
 	pSPIHandle->pSPIx->CR1 |= (pSPIHandle->SPIConfig.SSM << SPI_CR1_SSM_Pos);
 
-	/*!< Enable SPI >*/
+	if(pSPIHandle->SPIConfig.SSM == SPI_SSM_SW)
+	{
+		pSPIHandle->pSPIx->CR1 |=  (SPI_CR1_SSI);  /*!< Enable SSI in CR1 >*/
 
-	pSPIHandle->pSPIx->CR1 |= (1 << SPI_CR1_SPE_Pos);
+	}
 
 }
 
 /*
+ * @fn               - SPI_isFlag
+ * @brief            - Function that return the status of flag in SPI_SR register
+ * @param[in]        - Pointer to the SPI configuration structure
+ * @param[in]        - SPI_SR register flags
+ * @return           - True or False
+ * @note             - None
+ */
+
+uint8_t SPI_IsFlag(SPI_TypeDef* pSPIx , uint8_t flag)
+{
+	return (pSPIx->SR & flag);
+}
+
+/*
+ * todo
  * @fn               - SPI_DeInit
  * @brief            - Function to disable SPI peripheral
- * @param[in]        - Base Address of the SPI peripheral
+ * @param[in]        - Pointer to the SPI configuration structure
  * @return           - None
  * @note             - None
  */
 
-void SPI_DeInit(SPI_TypeDef* pSPI)
+void SPI_DeInit(SPI_handle_t* pSPIhandle)
 {
-	assert(pSPI);
+	assert(pSPIhandle);
+
+	assert(pSPIhandle->pSPIx);
+
+	//Page no 20.3.8
+
+	switch(pSPIhandle->SPIConfig.BUSCONFIG)
+	{
+
+	case SPI_BUS_CONF_FD:
+
+		while(!SPI_IsFlag(pSPIhandle->pSPIx, SPI_SR_RXNE)); /* Wait till last data is received */
+
+		while(!SPI_IsFlag(pSPIhandle->pSPIx , SPI_SR_TXE));  /* Wait till Tx Buffer is empty */
+
+		while(SPI_IsFlag(pSPIhandle->pSPIx, SPI_SR_BSY));     /* Wait till Buffers are free*/
+
+		pSPIhandle->pSPIx->CR1 &= ~(1U << SPI_CR1_SPE_Pos); /* Disable SPI */
+
+		SPI_PprlClkCtrl(pSPIhandle->pSPIx ,SPI_CLK_DISABLE); /* Disable Peripheral clock */
+
+	    break;
+
+	case SPI_BUS_CONF_HD_TX:
+
+		while(!SPI_IsFlag(pSPIhandle->pSPIx, SPI_SR_TXE));  /* Wait till Tx Buffer is empty */
+
+		while(SPI_IsFlag(pSPIhandle->pSPIx, SPI_SR_BSY));     /* Wait till Buffers are free*/
+
+		pSPIhandle->pSPIx->CR1 &= ~(1U << SPI_CR1_SPE_Pos); /* Disable SPI */
+
+		SPI_PprlClkCtrl(pSPIhandle->pSPIx ,SPI_CLK_DISABLE); /* Disable Peripheral clock */
+
+	    break;
+
+	default :
+
+		while(!SPI_IsFlag(pSPIhandle->pSPIx, SPI_SR_RXNE)); /* Wait till second last data is received */
+
+		__asm(" NOP");
+
+		pSPIhandle->pSPIx->CR1 &= ~(1U << SPI_CR1_SPE_Pos); /* Disable SPI */
+
+		while(!SPI_IsFlag(pSPIhandle->pSPIx, SPI_SR_RXNE)); /* Wait till second last data is received */
+
+		SPI_PprlClkCtrl(pSPIhandle->pSPIx ,SPI_CLK_DISABLE); /* Disable Peripheral clock */
+
+		break;
+
+	}
 
 }
+
+
+/*
+ *
+ * @fn               - SPI_PeripheralConrol
+ * @brief            - Function Enable / Disable the SPI Communication
+ * @param[in]        - Base Address of the SPI peripheral
+ * @param[in]        - SPI_Enable / SPI_Disable
+ * @return           - None
+ * @note             - None
+ */
+
+void SPI_PeripheralConrol(SPI_TypeDef *pSPIx , SPI_PerifCtrl_t setState)
+{
+	assert(pSPIx);
+
+	if(setState == SPI_ENABLE)
+	{
+		pSPIx->CR1 |= (1 << SPI_CR1_SPE_Pos);
+	}
+	else
+		pSPIx->CR1 &= ~(1 << SPI_CR1_SPE_Pos);
+}
+
+/*
+ *
+ * @fn               - SPI_SendData
+ * @brief            - Function to Send Data over SPI lines
+ * @param[in]        - Base Address of the SPI peripheral
+ * @param[in]        - Pointer to the Data to be sent
+ * @param[in]        - Size of Transfer
+ * @return           - None
+ * @note             - Blocking Call
+ */
+
+void SPI_SendData(SPI_TypeDef *pSPIx ,uint8_t *pData , uint32_t Size)
+{
+
+	assert(pSPIx);
+
+	assert(pData);
+
+	while(Size > 0)
+	{
+		while(!(SPI_IsFlag(pSPIx , SPI_SR_TXE)));
+
+		if(pSPIx->CR1 & (SPI_CR1_DFF))
+		{
+			pSPIx->DR = *(uint16_t*)pData;
+			Size-=2;
+			(uint16_t*)pData++;
+		}
+		else
+		{
+			pSPIx->DR = *pData;
+			Size--;
+			pData++;
+		}
+
+	}
+}
+
+

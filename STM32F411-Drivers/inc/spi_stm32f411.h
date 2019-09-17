@@ -71,6 +71,20 @@ typedef enum
 
 /*!@brief
  *
+ * SPI peripheral enable / disable
+ */
+
+typedef enum
+{
+	SPI_ENABLE,
+	SPI_DISABLE
+
+}SPI_PerifCtrl_t;
+
+
+
+/*!@brief
+ *
  * SPI device modes
  */
 
@@ -203,12 +217,18 @@ typedef struct
 
 void SPI_PprlClkCtrl(SPI_TypeDef* pSPI , SPI_PerifClk_t setState);    /*!<Function to control peripheral clock>*/
 
+void SPI_PeripheralConrol(SPI_TypeDef *pSPIx , SPI_PerifCtrl_t setState);
+
 /*!< SPI initialization Functions>*/
 
 void SPI_Init(SPI_handle_t *pSPIHandle);                                                        /*!<Function to initialize SPI peripheral>*/
-void SPI_DeInit(SPI_TypeDef* pSPI);                                                             /*!<Function to disable SPI peripheral>*/
+void SPI_DeInit(SPI_handle_t* pSPIhandle);                                                          /*!<Function to disable SPI peripheral>*/
 
 
+
+/*!< SPI send/receive Functions>*/
+
+void SPI_SendData(SPI_TypeDef *pSPIx ,uint8_t *pData , uint32_t Size);                         /*!<Blocking function that sends output data >*/
 
 
 #ifdef __cplusplus

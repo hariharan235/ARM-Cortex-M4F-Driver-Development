@@ -50,7 +50,7 @@ void ledInitPP()
     /*!< GPIO pull up and pull down control */
     LED.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_None;
 
-    GPIO_PprlClkCtrl(GPIOD,GPIO_CLK_ENABLE);
+    //GPIO_PprlClkCtrl(GPIOD,GPIO_CLK_ENABLE);
 
     GPIO_Init(&LED);
 
@@ -110,7 +110,7 @@ void pushBtnInit()
     /*!< GPIO pull up and pull down control */
     PB.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_None; /*!<Already has a resistor to ground*/
 
-    GPIO_PprlClkCtrl(GPIOA,GPIO_CLK_ENABLE);
+    //GPIO_PprlClkCtrl(GPIOA,GPIO_CLK_ENABLE);
 
     GPIO_Init(&PB);
 
@@ -137,7 +137,7 @@ void extPushBtnInit()
     /*!< GPIO pull up and pull down control */
     ePB.GPIO_PinConfig.PINPULLPDCONTROL = GPIO_PuPd_Pu; /*!<Already has a resistor to ground*/
 
-    GPIO_PprlClkCtrl(GPIOE,GPIO_CLK_ENABLE);
+   // GPIO_PprlClkCtrl(GPIOE,GPIO_CLK_ENABLE);
 
     GPIO_Init(&ePB);
 

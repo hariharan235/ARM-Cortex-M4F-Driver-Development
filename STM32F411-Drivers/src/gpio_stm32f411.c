@@ -149,6 +149,13 @@ void GPIO_Init(GPIO_handle_t *pGPIOHandle)
 
 	assert(pGPIOHandle);
 
+	assert(pGPIOHandle->pGPIO);
+
+	/*!< Enable Peripheral Clock */
+
+	GPIO_PprlClkCtrl(pGPIOHandle->pGPIO,GPIO_CLK_ENABLE);
+
+
 	/*!< Configure GPIO Pin Mode */
 
 	if(pGPIOHandle->GPIO_PinConfig.PINMODE <= GPIO_MODE_ANALOG)
