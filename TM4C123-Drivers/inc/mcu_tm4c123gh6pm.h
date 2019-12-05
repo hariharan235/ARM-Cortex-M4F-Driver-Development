@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    custom_tm4c123.hgh6pm, file name will change
- * @author  Aditya Mall.
+ * @author  Aditya Mall.Hari Haran Krishnan
  * @brief   TM4C123GH6PM Device Peripheral Access Layer Header File.
  *
  *          This file contains:
@@ -12,7 +12,7 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall </center></h2>
+ * <h2><center>&copy; COPYRIGHT(c) 2019 Aditya Mall, Hari Haran Krishnan </center></h2>
  *
  * TODO Add license.
  *
@@ -33,6 +33,7 @@
 #ifndef MAIN_TM4C123GH6PM_H_
 #define MAIN_TM4C123GH6PM_H_
 
+#include "mcu_tm4c123gh6pm.h"
 
 /*
  * @brief Standard C Headers
@@ -158,11 +159,13 @@ typedef enum {
 #define DS        DISABLE
 
 
+
 /***************************************************************************/
 /*                                                                         */
 /*                       Device Memory Map                                 */
 /*                                                                         */
 /***************************************************************************/
+
 
 
 /*
@@ -218,6 +221,7 @@ typedef enum {
 #define SYSCTL_BASEADDR          (APBPERIPH_BASEADDR + 0x000FE000UL)  /*!< Base address of System Control Register */
 
 
+
 /*
  * @brief AHB Peripherals Base Addresses
  */
@@ -235,8 +239,10 @@ typedef enum {
  * @brief Base Addresses of Core Peripherals
  */
 #define COREPERIPH_BASEADDR      0xE000E000UL                      /*!< Processor Core Peripheral base address */
-#define SYSTIC_BASEADDR          (COREPERIPH_BASEADDR + 0x0010UL)  /*!< SysTick Base Address                   */
+#define SYSTICK_BASEADDR          (COREPERIPH_BASEADDR + 0x010UL)  /*!< SysTick Base Address                   */
+#define SCB_BASEADDR             (COREPERIPH_BASEADDR + 0x008UL)   /*!< System Control Block Base Address      */
 #define NVIC_BASEADDR            (COREPERIPH_BASEADDR + 0x0100UL)  /*!< NVIC Base Address                      */
+#define MPU_BASEADDR             (COREPERIPH_BASEADDR + 0xD90UL)   /*!< MPU Base Address                      */
 
 
 
@@ -335,7 +341,7 @@ typedef struct
 /*
  * @brief System Control Register Structure
  */
-typedef struct
+typedef struct system_control
 {
     __IO uint32_t DID0;             /*!< Device Identification 0,                                                           Address offset: 0x000          */
     __IO uint32_t DID1;             /*!< Device Identification 1,                                                           Address offset: 0x004          */
@@ -508,14 +514,14 @@ typedef struct
     __IO uint32_t PREEPROM;         /*!< EEPROM Peripheral Ready,                                                           Address offset: 0xA58          */
     __IO uint32_t PRWTIMER;         /*!< 32/64-Bit Wide General-Purpose Timer Peripheral Ready,                             Address offset: 0xA5C          */
 
-} SYSCTL_T;
+} sysctl_t;
 
 
 
 /*
  * @brief System Control Legacy Register Structure
  */
-typedef struct
+typedef struct system_control_legacy
 {
     __I  uint32_t RESERVED[2];    /*!< RESERVED,                                         Address offset: 0x000 to 0x004 */
     __IO uint32_t DC0;            /*!< Device Capabilities 0,                            Address offset: 0x008          */
@@ -549,15 +555,15 @@ typedef struct
     __I  uint32_t RESERVED7[3];   /*!< RESERVED,                                         Address offset: 0x194 to 0x19C */
     __IO uint32_t NVMSTAT;        /*!< Non-Volatile Memory Information,                  Address offset: 0x1A0          */
 
-} SYSCTL_LEGACY_T;
+} sysctl_legacy_t;
 
 
 
 /*
- * @brief General-Purpose Input/Outputs
- * TODO complete Address offsets
+ * @brief General-Purpose Input/Outputs Register Structure
+ * TODO complete Address offsets docs
  */
-typedef struct
+typedef struct gpio_port
 {
     __I  uint32_t BITMASK[255];  /*!< GPIO [9:2] register mask space, see Data Sheet,  Address offset: 0x3FC */
     __IO uint32_t DATA;          /*!< GPIO Data,                                       Address offset: 0x400 */
@@ -586,31 +592,121 @@ typedef struct
     __IO uint32_t ADCCTL;        /*!< GPIO ADC Control,                                Address offset: 0x000 */
     __IO uint32_t DMACTL;        /*!< GPIO DMA Control,                                Address offset: 0x000 */
 
-} GPIO_PORT_T;
+} gpio_port_t;
 
 
-/*
- * @brief Serial Peripheral Interface Registers
- *
+/**
+ * @brief Synchronous Serial Interface peripheral (SSI) Register Structure
  */
 
-typedef struct
+typedef struct ssi_periheral
 {
-    __IO uint32_t CR0;    /*!< SSI Control 0                                        Address offset: 0x000 */
-    __IO uint32_t CR1;    /*!< SSI Control 1                                     Address offset: 0x004 */
-    __IO uint32_t DR;    /*!< SSI Data Register                                  Address offset: 0x008 */
-    __I uint32_t SR;    /*!< SSI Status Register                                Address offset: 0x00C */
-    __IO uint32_t CPSR;   /*!< SSI Clock Pre-scale                                              Address offset: 0x0010 */
-    __IO uint32_t IM;    /*!< SSI Interrupt Mask                                 Address offset: 0x0014 */
-    __I uint32_t RIS;   /*!< SSI Raw Interrupt Status                           Address offset: 0x0018 */
-    __I uint32_t MIS;   /*!< SSI Masked Interrupt Status                         Address offset: 0x001C */
-    __O uint32_t ICR;   /*!< SSI Interrupt Clear,                             Address offset: 0x0020 */
-    __IO uint32_t DMACTL; /*!< SSI DMA Control,                                Address offset: 0x0024 */
-    __I  uint32_t RESERVED[1000];  /*!< RESERVED,                                Address offset: 0x0028 */
-    __IO uint32_t CC;     /*!< SSI Clock Configuration                         Address offset: 0x0FC8 */
+    __IO uint32_t  CR0;             /*!< SSI Control 0,                Address offset: 0x000          */
+    __IO uint32_t  CR1;             /*!< SSI Control 1,                Address offset: 0x004          */
+    __IO uint32_t  DR;              /*!< SSI Data,                     Address offset: 0x008          */
+    __IO uint32_t  SR;              /*!< SSI Status,                   Address offset: 0x00C          */
+    __IO uint32_t  CPSR;            /*!< SSI Clock Prescale,           Address offset: 0x010          */
+    __IO uint32_t  IM;              /*!< SSI Interrupt Mask,           Address offset: 0x014          */
+    __IO uint32_t  RIS;             /*!< SSI Raw Interrupt Status,     Address offset: 0x018          */
+    __IO uint32_t  MIS;             /*!< SSI Masked Interrupt Status,  Address offset: 0x01C          */
+    __O  uint32_t  ICR;             /*!< SSI Interrupt Clear,          Address offset: 0x020          */
+    __IO uint32_t  DMACTL;          /*!< SSI DMA Control,              Address offset: 0x024          */
+    __I  uint32_t  RESERVED[1000];  /*!< RESERVED,                     Address offset: 0x028 to 0xFC4 */
+    __IO uint32_t  CC;              /*!< SSI Clock Configuration       Address offset: 0xFC8          */
+
+} ssi_periph_t;
 
 
-}ssi_periph_t;
+
+typedef union uart_rsr_ecr
+{
+    __I  uint32_t  RSR;            /*!< UART Receive Status/Error Clear                                       */
+    __IO uint32_t  ECR_UART_ALT;   /*!< UART Receive Status/Error Clear                                       */
+
+} uart_rsr_ecr_t;
+
+
+typedef struct uart_peripheral
+{
+    __IO uint32_t  DR;              /*!< UART Data                                                             */
+    uart_rsr_ecr_t RSR_ECR;         /*!< UART Receive and Error status clear                                   */
+    __I  uint32_t  RESERVED[4];     /*!< RESERVED,                                       Address offset: 0x000 */
+    __IO uint32_t  FR;              /*!< UART Flag                                                             */
+    __I  uint32_t  RESERVED1;       /*!< RESERVED,                                       Address offset: 0x000 */
+    __IO uint32_t  ILPR;            /*!< UART IrDA Low-Power Register                                          */
+    __IO uint32_t  IBRD;            /*!< UART Integer Baud-Rate Divisor                                        */
+    __IO uint32_t  FBRD;            /*!< UART Fractional Baud-Rate Divisor                                     */
+    __IO uint32_t  LCRH;            /*!< UART Line Control                                                     */
+    __IO uint32_t  CTL;             /*!< UART Control                                                          */
+    __IO uint32_t  IFLS;            /*!< UART Interrupt FIFO Level Select                                      */
+    __IO uint32_t  IM;              /*!< UART Interrupt Mask                                                   */
+    __IO uint32_t  RIS;             /*!< UART Raw Interrupt Status                                             */
+    __IO uint32_t  MIS;             /*!< UART Masked Interrupt Status                                          */
+    __O  uint32_t  ICR;             /*!< UART Interrupt Clear                                                  */
+    __IO uint32_t  DMACTL;          /*!< UART DMA Control                                                      */
+    __I  uint32_t  RESERVED2[22];   /*!< RESERVED,                                       Address offset: 0x000 */
+    __IO uint32_t  UART9BITADDR;    /*!< UART 9-Bit Self Address                                               */
+    __IO uint32_t  UART9BITAMASK;   /*!< UART 9-Bit Self Address Mask                                          */
+    __I  uint32_t  RESERVED3[965];  /*!< RESERVED,                                       Address offset: 0x000 */
+    __IO uint32_t  PP;              /*!< UART Peripheral Properties                                            */
+    __I  uint32_t  RESERVED4;       /*!< RESERVED,                                       Address offset: 0x000 */
+    __IO uint32_t  CC;              /*!< UART Clock Configuration                                              */
+
+} uart_periph_t;
+
+
+
+typedef struct systick_control_block
+{
+    __IO uint32_t STCTRL;
+    __IO uint32_t STRELOAD;
+    __IO uint32_t STCURRENT;
+
+}systick_periph_t;
+
+
+
+typedef struct system_control_block
+{
+    __IO uint32_t ACTLR;
+    __IO uint32_t RESERVED1[829];
+    __I uint32_t CPUID;
+    __IO uint32_t INTCTRL;
+    __IO uint32_t VTABLE;
+    __IO uint32_t APINT;
+    __IO uint32_t SYSCTRL;
+    __IO uint32_t CFGCTRL;
+    __IO uint32_t SYSPRI1;
+    __IO uint32_t SYSPRI2;
+    __IO uint32_t SYSPRI3;
+    __IO uint32_t SYSHNDCTRL;
+    __IO uint32_t FAULTSTAT;
+    __IO uint32_t HFAULTSTAT;
+    __IO uint32_t RESERVED2;
+    __IO uint32_t MMADDR;
+    __IO uint32_t FAULTADDR;
+
+}scb_periph_t;
+
+
+
+
+typedef struct mpu_interface
+{
+    __I uint32_t  TYPE;
+    __IO uint32_t CTRL;
+    __IO uint32_t NUMBER;
+    __IO uint32_t BASE;
+    __IO uint32_t ATTR;
+    __IO uint32_t BASE1;
+    __IO uint32_t ATTR1;
+    __IO uint32_t BASE2;
+    __IO uint32_t ATTR2;
+    __IO uint32_t BASE3;
+    __IO uint32_t ATTR3;
+
+}mpu_interface_t;
+
 
 /***************************************************************************/
 /*                                                                         */
@@ -622,30 +718,42 @@ typedef struct
 /*
  * @brief Peripheral Declarations
  */
-#define GPIOA                    ((GPIO_PORT_T *) GPIOA_BASEADDR)
-#define GPIOB                    ((GPIO_PORT_T *) GPIOB_BASEADDR)
-#define GPIOC                    ((GPIO_PORT_T *) GPIOC_BASEADDR)
-#define GPIOD                    ((GPIO_PORT_T *) GPIOD_BASEADDR)
-#define GPIOE                    ((GPIO_PORT_T *) GPIOE_BASEADDR)
-#define GPIOF                    ((GPIO_PORT_T *) GPIOF_BASEADDR)
+#define GPIOA                    ((gpio_port_t *) GPIOA_BASEADDR)
+#define GPIOB                    ((gpio_port_t *) GPIOB_BASEADDR)
+#define GPIOC                    ((gpio_port_t *) GPIOC_BASEADDR)
+#define GPIOD                    ((gpio_port_t *) GPIOD_BASEADDR)
+#define GPIOE                    ((gpio_port_t *) GPIOE_BASEADDR)
+#define GPIOF                    ((gpio_port_t *) GPIOF_BASEADDR)
 
-#define GPIOA_AHB                ((GPIO_PORT_T *) GPIOA_AHB_BASEADDR)
-#define GPIOB_AHB                ((GPIO_PORT_T *) GPIOB_AHB_BASEADDR)
-#define GPIOC_AHB                ((GPIO_PORT_T *) GPIOC_AHB_BASEADDR)
-#define GPIOD_AHB                ((GPIO_PORT_T *) GPIOD_AHB_BASEADDR)
-#define GPIOE_AHB                ((GPIO_PORT_T *) GPIOE_AHB_BASEADDR)
-#define GPIOF_AHB                ((GPIO_PORT_T *) GPIOF_AHB_BASEADDR)
+#define GPIOA_AHB                ((gpio_port_t *) GPIOA_AHB_BASEADDR)
+#define GPIOB_AHB                ((gpio_port_t *) GPIOB_AHB_BASEADDR)
+#define GPIOC_AHB                ((gpio_port_t *) GPIOC_AHB_BASEADDR)
+#define GPIOD_AHB                ((gpio_port_t *) GPIOD_AHB_BASEADDR)
+#define GPIOE_AHB                ((gpio_port_t *) GPIOE_AHB_BASEADDR)
+#define GPIOF_AHB                ((gpio_port_t *) GPIOF_AHB_BASEADDR)
 
 #define SSI0                     ((ssi_periph_t *) SSI0_BASEADDR)
 #define SSI1                     ((ssi_periph_t *) SSI1_BASEADDR)
 #define SSI2                     ((ssi_periph_t *) SSI2_BASEADDR)
 #define SSI3                     ((ssi_periph_t *) SSI3_BASEADDR)
 
-#define SYSCTL                   ((SYSCTL_T        *)SYSCTL_BASEADDR)
-#define SYSCTL_LEGACY            ((SYSCTL_LEGACY_T *)SYSCTL_BASEADDR)
+#define UART0                    ((uart_periph_t *) UART0_BASEADDR)
+#define UART1                    ((uart_periph_t *) UART1_BASEADDR)
+#define UART2                    ((uart_periph_t *) UART2_BASEADDR)
+#define UART3                    ((uart_periph_t *) UART3_BASEADDR)
+#define UART4                    ((uart_periph_t *) UART4_BASEADDR)
+#define UART5                    ((uart_periph_t *) UART5_BASEADDR)
+#define UART6                    ((uart_periph_t *) UART6_BASEADDR)
+#define UART7                    ((uart_periph_t *) UART7_BASEADDR)
 
+#define SYSCTL                   ((sysctl_t        *) SYSCTL_BASEADDR)
+#define SYSCTL_LEGACY            ((sysctl_legacy_t *) SYSCTL_BASEADDR)
 
-#define NVIC                     ((NVIC_T          *)NVIC_BASEADDR)
+#define SYSTICK                 ((systick_periph_t *)SYSTICK_BASEADDR)
+#define SCB                      ((scb_periph_t *)SCB_BASEADDR)
+#define NVIC                     ((NVIC_T *) NVIC_BASEADDR)
+#define MPU                      ((mpu_interface_t *) MPU_BASEADDR)
+
 
 
 

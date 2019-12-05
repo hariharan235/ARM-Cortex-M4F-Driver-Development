@@ -1,134 +1,65 @@
-
-
-/*
- * @file  blinky_blue.c
- * @brief Crude test for header file structure defines and driver APIs
- */
-
-
-
-#include "TM4C123-Drivers/inc/main_tm4c123gh6pm.h"
-#include "TM4C123-Drivers/inc/gpio_tm4c123gh6pm.h"
-#include "API/inc/gpio.h"
-
-#define POLL 1
-
-#if POLL
-#define IRQ 0
-#else
-#define IRQ 1
-#endif
-
-void initHW()
-{
-
-    // clock set up
-    SYSCTL_T *pSYSCTL = SYSCTL;
-
-    // 40 Hz
-    pSYSCTL->RCC = 0x00000540 | 0x00400000 | (0x04 << 23);
-
-}
-
-
-// Dr.Losh's delay
-void waitMicrosecond(uint32_t us)
-{
-    __asm("WMS_LOOP0:   MOV  R1, #6"       );
-    __asm("WMS_LOOP1:   SUB  R1, #1"       );
-    __asm("             CBZ  R1, WMS_DONE1");
-    __asm("             NOP"               );
-    __asm("             NOP"               );
-    __asm("             B    WMS_LOOP1"    );
-    __asm("WMS_DONE1:   SUB  R0, #1"       );
-    __asm("             CBZ  R0, WMS_DONE0");
-    __asm("             NOP"               );
-    __asm("             B    WMS_LOOP0"    );
-    __asm("WMS_DONE0:"                     );
-}
-
-
-void GpiofISR(void)
-{
-
-    GPIOF->ICR |= (1 << 4);
-
-    //GPIO_WriteToPin(GPIOF, 1, 1);
-    //GPIO_WriteToPin(GPIOF, 2, 1);
-
-    digitalWrite("PF1", HIGH);
-    digitalWrite("PF2", HIGH);
-
-}
-
-
-void legacy_gpioInit()
-{
-
-    //    GPIO_HANDLE_T ioTest, led3;
-    //    ioTest.pGPIOx = GPIOF;
-    //    ioTest.gpioPinConfig.PINNUMBER = 2;
-    //    ioTest.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
-    //    ioTest.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
-    //
-    //    GPIO_Init(&ioTest);
-
-    //    led3.pGPIOx = GPIOF;
-    //    led3.gpioPinConfig.PINNUMBER = 1;
-    //    led3.gpioPinConfig.DIRECTION = GPIO_DIR_OUTPUT;
-    //    led3.gpioPinConfig.PINMODE   = GPIO_DEN_ENABLE;
-    //
-    //    GPIO_Init(&led3);
-
-    //    ioTest.pGPIOx = GPIOF;
-    //    ioTest.gpioPinConfig.PINNUMBER  = 4;
-    //    ioTest.gpioPinConfig.DIRECTION  = GPIO_DIR_INPUT;
-    //    ioTest.gpioPinConfig.PINMODE    = GPIO_DEN_ENABLE;
-    //    ioTest.gpioPinConfig.PULLUPDOWN = GPIO_PUR_ENABLE;
-    //
-    //    GPIO_Init(&ioTest);
-
-}
-
-
 /**
  * main.c
  */
-int main(void)
+
+#include "tm4c123gh6pm.h"
+#include "TM4C123-Drivers/inc/mcu_tm4c123gh6pm.h"
+#include "TM4C123-Drivers/inc/gpio_tm4c123gh6pm.h"
+#include "TM4C123-Drivers/inc/wait.h"
+#include <string.h>
+
+void init_led_gpio(void)
 {
+    gpio_handle_t led;
+    memset(&led,0,sizeof(led));
+    led.p_gpio_x = GPIOF;
+    led.gpio_pin_config.direction = GPIO_DIR_OUTPUT;
+    led.gpio_pin_config.pin_mode = GPIO_DEN_ENABLE;
+    led.gpio_pin_config.pin_number = 1;
+    gpio_init(&led);
+    led.gpio_pin_config.pin_number = 2;
+    gpio_init(&led);
+    led.gpio_pin_config.pin_number = 3;
+    gpio_init(&led);
+}
 
-    // The usual initHw
-    initHW();
+void init_pb_gpio(void)
+{
+    gpio_handle_t pushbtn;
+    memset(&pushbtn,0,sizeof(pushbtn));
+    pushbtn.p_gpio_x = GPIOF;
+    pushbtn.gpio_pin_config.direction = GPIO_DIR_INPUT;
+    pushbtn.gpio_pin_config.pin_mode = GPIO_DEN_ENABLE;
+    pushbtn.gpio_pin_config.pull_up_down = GPIO_PUR_ENABLE;
+    pushbtn.gpio_pin_config.pin_number = 4;
+    gpio_init(&pushbtn);
+}
 
-    pinMode("PF2", OUTPUT);
-
-    pinMode("PF1", OUTPUT, DIGITAL);
-
-    pinMode("PF4", INPUT, DIGITAL, PULLUP);
-
-#if IRQ
-    GPIOF->IM |= (1 << 4);
-    NVIC->EN0 |= (1 << 30);
-#endif
+void cycle_led_toggle(void)
+{
+    static uint8_t id = 1;
 
     while(1)
     {
+        while(gpio_read_pin(GPIOF,4));
 
-#if POLL
-        if(digitalRead("PF4") == 0)
-        {
-            digitalWrite("PF1", HIGH);
-            digitalWrite("PF2", HIGH);
+            if(id == 4)
+            {
+                id = 1;
+            }
+            gpio_write_pin(GPIOF,id,SET);
             waitMicrosecond(100000);
-
-            digitalWrite("PF1", LOW);
-            digitalWrite("PF2", LOW);
-            waitMicrosecond(100000);
-        }
-#endif
-
+            gpio_write_pin(GPIOF,id,RESET);
+            id++;
     }
+}
 
-    return 0;
 
+int main(void)
+{
+    init_led_gpio();
+    init_pb_gpio();
+    cycle_led_toggle();
+    for(;;);
+    //return 0;
 }
